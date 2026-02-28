@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///Users/nyyjsw/Desktop/portfolio/src/app/articles/page.tsx"],"sourcesContent":["import Link from \"next/link\";\n\nexport default function ArticlesPage() {\n  return (\n    <div className=\"min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-center px-6\">\n      <p className=\"font-sans text-xs tracking-[0.35em] uppercase text-white/35 mb-5\">Articles</p>\n      <h1\n        className=\"text-4xl text-white font-light mb-4\"\n        style={{ fontFamily: \"Georgia, 'Songti SC', STSong, serif\" }}\n      >\n        文章作品集\n      </h1>\n      <p className=\"text-white/35 text-sm mb-10 font-sans\">内容整理中，敬请期待。</p>\n      <Link\n        href=\"/\"\n        className=\"font-sans text-white/40 text-xs tracking-widest hover:text-white/70 transition-colors\"\n      >\n        ← 返回首页\n      </Link>\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;;AAAA;;;AAEe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;;0BACb,8OAAC;gBAAE,WAAU;0BAAmE;;;;;;0BAChF,8OAAC;gBACC,WAAU;gBACV,OAAO;oBAAE,YAAY;gBAAsC;0BAC5D;;;;;;0BAGD,8OAAC;gBAAE,WAAU;0BAAwC;;;;;;0BACrD,8OAAC,0LAAI;gBACH,MAAK;gBACL,WAAU;0BACX;;;;;;;;;;;;AAKP"}}]
+}
