@@ -99,7 +99,7 @@ export default function MusicPlayer() {
           />
         </div>
 
-        <audio ref={audioRef} src="/music/song.mp3" loop />
+        <audio ref={audioRef} src="/dny.github.io/music/song.mp3" loop />
       </div>
 
       <style>{`
