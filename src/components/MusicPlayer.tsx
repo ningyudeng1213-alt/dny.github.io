@@ -17,6 +17,8 @@ export default function MusicPlayer() {
     }
   }, [playing]);
 
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
   // 唱片阴影：停止 vs 播放
   const discShadow = playing
     ? '6px 12px 30px rgba(0,0,0,0.5), 3px 6px 12px rgba(0,0,0,0.3)'
@@ -60,7 +62,7 @@ export default function MusicPlayer() {
           }}
         >
           <Image
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/disc.png`}
+            src={`${basePath}/disc.png`}
             alt="disc"
             width={50}
             height={50}
@@ -90,7 +92,7 @@ export default function MusicPlayer() {
           }}
         >
           <Image
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/needle.png`}
+            src={`${basePath}/needle.png`}
             alt="needle"
             width={48}
             height={54}
@@ -99,7 +101,7 @@ export default function MusicPlayer() {
           />
         </div>
 
-        <audio ref={audioRef} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/music/song.mp3`} loop />
+        <audio ref={audioRef} src={`${basePath}/music/song.mp3`} loop />
       </div>
 
       <style>{`

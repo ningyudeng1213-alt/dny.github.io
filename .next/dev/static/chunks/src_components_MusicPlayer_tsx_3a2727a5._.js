@@ -34,6 +34,7 @@ function MusicPlayer() {
     }["MusicPlayer.useEffect"], [
         playing
     ]);
+    const basePath = ("TURBOPACK compile-time value", "/dny.github.io") || '';
     // 唱片阴影：停止 vs 播放
     const discShadow = playing ? '6px 12px 30px rgba(0,0,0,0.5), 3px 6px 12px rgba(0,0,0,0.3)' : '4px 8px 20px rgba(0,0,0,0.35), 2px 4px 8px rgba(0,0,0,0.2)';
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -66,7 +67,7 @@ function MusicPlayer() {
                             zIndex: 1
                         },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            src: `${("TURBOPACK compile-time value", "/dny.github.io") || ''}/disc.png`,
+                            src: `${basePath}/disc.png`,
                             alt: "disc",
                             width: 50,
                             height: 50,
@@ -78,12 +79,12 @@ function MusicPlayer() {
                             priority: true
                         }, void 0, false, {
                             fileName: "[project]/src/components/MusicPlayer.tsx",
-                            lineNumber: 62,
+                            lineNumber: 64,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/MusicPlayer.tsx",
-                        lineNumber: 47,
+                        lineNumber: 49,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -99,7 +100,7 @@ function MusicPlayer() {
                             zIndex: 2
                         },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            src: `${("TURBOPACK compile-time value", "/dny.github.io") || ''}/needle.png`,
+                            src: `${basePath}/needle.png`,
                             alt: "needle",
                             width: 48,
                             height: 54,
@@ -111,27 +112,27 @@ function MusicPlayer() {
                             priority: true
                         }, void 0, false, {
                             fileName: "[project]/src/components/MusicPlayer.tsx",
-                            lineNumber: 92,
+                            lineNumber: 94,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/MusicPlayer.tsx",
-                        lineNumber: 79,
+                        lineNumber: 81,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("audio", {
                         ref: audioRef,
-                        src: `${("TURBOPACK compile-time value", "/dny.github.io") || ''}/music/song.mp3`,
+                        src: `${basePath}/music/song.mp3`,
                         loop: true
                     }, void 0, false, {
                         fileName: "[project]/src/components/MusicPlayer.tsx",
-                        lineNumber: 102,
+                        lineNumber: 104,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/MusicPlayer.tsx",
-                lineNumber: 33,
+                lineNumber: 35,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
@@ -143,7 +144,7 @@ function MusicPlayer() {
       `
             }, void 0, false, {
                 fileName: "[project]/src/components/MusicPlayer.tsx",
-                lineNumber: 105,
+                lineNumber: 107,
                 columnNumber: 7
             }, this)
         ]

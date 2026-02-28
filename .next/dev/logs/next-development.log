@@ -3,3 +3,9 @@
 [00:00:03.273] Server  LOG     ✓ Compiled in 14ms
 [00:00:05.724] Server  LOG     ✓ Compiled in 9ms
 [00:00:08.857] Server  LOG     ✓ Compiled in 10ms
+[00:08:35.528] Server  LOG     ✓ Compiled in 25ms
+[00:08:37.931] Server  LOG     ✓ Compiled in 11ms
+[00:08:40.192] Server  LOG     ✓ Compiled in 11ms
+[00:08:42.906] Server  LOG     ✓ Compiled in 11ms
+[00:08:45.866] Server  LOG       Reload env: .env.local
+[00:08:46.035] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
