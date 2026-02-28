@@ -60,7 +60,7 @@ export default function MusicPlayer() {
           }}
         >
           <Image
-            src="/disc.png"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/disc.png`}
             alt="disc"
             width={50}
             height={50}
@@ -90,7 +90,7 @@ export default function MusicPlayer() {
           }}
         >
           <Image
-            src="/needle.png"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/needle.png`}
             alt="needle"
             width={48}
             height={54}
@@ -99,7 +99,7 @@ export default function MusicPlayer() {
           />
         </div>
 
-        <audio ref={audioRef} src="/dny.github.io/music/song.mp3" loop />
+        <audio ref={audioRef} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/music/song.mp3`} loop />
       </div>
 
       <style>{`
