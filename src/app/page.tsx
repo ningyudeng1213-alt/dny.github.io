@@ -1,11 +1,16 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Component } from "@/components/ui/etheral-shadow";
 import { WordPullUp } from "@/components/ui/word-pull-up";
 import { ShimmerButton } from "@/components/ui/shimmer-button";
+import Menu from "@/components/ui/navbar";
+import { RevealImageList, DemoList } from "@/components/ui/reveal-images";
+import { ProjectShowcase } from "@/components/ui/project-showcase";
+import { LandingAccordionItem } from "@/components/ui/interactive-image-accordion";
+import { GradualSpacing } from "@/components/ui/gradual-spacing";
+import { IntroScreen } from "@/components/ui/intro-screen";
 
 const BentoItem = ({
   children,
@@ -101,7 +106,7 @@ const BentoItem = ({
           transitionTimingFunction: 'var(--easing)',
           borderRadius: 'var(--radius)',
           border: '1px solid rgba(255,255,255,0.5)',
-          background: 'rgba(255,255,255,0.08)',
+          background: 'rgba(255,255,255,0.45)',
           backdropFilter: 'blur(2px)',
           WebkitBackdropFilter: 'blur(2px)',
           filter: 'drop-shadow(0 0 1px rgba(255,255,255,0.8)) drop-shadow(2px 4px 12px rgba(0,0,0,0.08))',
@@ -127,14 +132,236 @@ const BentoItem = ({
   );
 };
 
-const cards = [
-  { title: "文章作品集", desc: "学术写作与内容创作", href: "/articles", emoji: "✍️", delay: 0, index: 0 },
-  { title: "项目作品集", desc: "运营项目与案例复盘", href: "/projects", emoji: "📁", delay: 1, index: 1 },
-  { title: "自媒体经历", desc: "账号运营与内容策略", href: "/social", emoji: "📱", delay: 2, index: 2 },
+const menus = [
+  { id: 1, title: 'Home', url: '/', scrollTo: 'section1' },
+  {
+    id: 2,
+    title: 'Works',
+    url: '/works',
+    dropdown: true,
+    items: [
+      { id: 21, title: 'Article', url: '/works/article' },
+      { id: 22, title: 'Demo', url: '/works/demo' },
+    ],
+  },
+  {
+    id: 3,
+    title: 'About',
+    url: '/about',
+    dropdown: true,
+    items: [
+      { id: 31, title: 'Media', url: '/about/media' },
+      { id: 32, title: 'Photo', url: '/about/photo' },
+      { id: 33, title: 'Cook', url: '/about/cook' },
+    ],
+  },
+  { id: 4, title: 'Resume', url: '/resume', scrollTo: 'section-contact' },
 ];
 
+const cards = [
+  { title: "文章作品集", sub: "Academic Writing & Content Creation", href: "/articles", delay: 0, index: 0, sectionId: 'section3', back: 'To be continued...' },
+  { title: "项目作品集", sub: "Operation Projects & Case Studies", href: "/projects", delay: 1, index: 1, sectionId: 'section4', back: 'To be continued...' },
+  { title: "自媒体经历", sub: "Social Media & Content Strategy", href: "/social", delay: 2, index: 2, sectionId: 'section5', back: 'To be continued...' },
+];
+
+function Section5() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  const clipTop = useTransform(scrollYProgress, [0, 1], [30, 0]);
+  const clipBottom = useTransform(scrollYProgress, [0, 1], [70, 100]);
+  const clipLeft = useTransform(scrollYProgress, [0, 1], [35, 0]);
+  const clipRight = useTransform(scrollYProgress, [0, 1], [65, 100]);
+
+  const clipPath = useTransform(
+    [clipTop, clipBottom, clipLeft, clipRight],
+    ([t, b, l, r]: number[]) => `inset(${t}% ${100 - r}% ${100 - b}% ${l}%)`
+  );
+
+  return (
+    <div ref={containerRef} style={{ height: '300vh' }}>
+      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
+        <motion.div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: 'url(https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=1800&auto=format&fit=crop)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            clipPath,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+const UnfoldButton = ({ onUnfold }: { onUnfold: () => void }) => {
+  const [hovered, setHovered] = React.useState(false);
+  return (
+    <button
+      onClick={onUnfold}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        marginTop: '32px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '12px',
+        background: 'none',
+        border: 'none',
+        padding: 0,
+        cursor: 'pointer',
+        fontSize: '15px',
+        fontWeight: 700,
+        color: hovered ? '#c9a84c' : '#2a2010',
+        fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
+        letterSpacing: '0.25em',
+        borderBottom: `2px solid ${hovered ? '#c9a84c' : '#2a2010'}`,
+        paddingBottom: '4px',
+        textShadow: hovered ? '0 0 20px rgba(201,168,76,0.6)' : 'none',
+        transform: hovered ? 'scale(1.03)' : 'scale(1)',
+        transition: 'color 0.4s ease, text-shadow 0.4s ease, border-color 0.4s ease, transform 0.2s',
+      }}
+    >
+      Unfold →
+    </button>
+  );
+};
+
 export default function Home() {
-  const router = useRouter();
+  const [showIntro, setShowIntro] = React.useState(true);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('skipIntro')) {
+      sessionStorage.removeItem('skipIntro');
+      setShowIntro(false);
+      const hash = window.location.hash;
+      if (hash) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const el = document.querySelector(hash);
+            if (el) el.scrollIntoView({ behavior: 'instant' });
+          });
+        });
+      }
+    }
+  }, []);
+  const [isUnfolding, setIsUnfolding] = React.useState(false);
+  const [clickedCard, setClickedCard] = React.useState<string | null>(null);
+  const [startAnimation, setStartAnimation] = React.useState(false);
+  const [cardsVisible, setCardsVisible] = React.useState(false);
+  const [hasAnimated, setHasAnimated] = React.useState(false);
+  const [section3Visible, setSection3Visible] = React.useState(false);
+  const [section4Visible, setSection4Visible] = React.useState(false);
+  const [section5Visible, setSection5Visible] = React.useState(false);
+  const [contactVisible, setContactVisible] = React.useState(false);
+
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setTimeout(() => setStartAnimation(true), 300);
+        } else {
+          setStartAnimation(false);
+        }
+      },
+      { threshold: 0.8 }
+    );
+    const section = document.getElementById('section2');
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleCardClick = (card: typeof cards[0]) => {
+    if (clickedCard) return;
+    setClickedCard(card.href);
+    setTimeout(() => {
+      document.getElementById(card.sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      setClickedCard(null);
+    }, 400);
+  };
+
+  const handleUnfold = () => {
+    setIsUnfolding(true);
+    setTimeout(() => {
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    }, 600);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated) {
+          setCardsVisible(true);
+          setHasAnimated(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.95 }
+    );
+    const section = document.getElementById('section2');
+    if (section) observer.observe(section);
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsUnfolding(false);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    const section1 = document.getElementById('section1');
+    if (section1) observer.observe(section1);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => { setSection3Visible(entries[0].isIntersecting); },
+      { threshold: 0.3 }
+    );
+    const el = document.getElementById('section3');
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => { setSection4Visible(entries[0].isIntersecting); },
+      { threshold: 0.3 }
+    );
+    const el = document.getElementById('section4');
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => { setSection5Visible(entries[0].isIntersecting); },
+      { threshold: 0.3 }
+    );
+    const el = document.getElementById('section5');
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => { setContactVisible(entries[0].isIntersecting); },
+      { threshold: 0.3 }
+    );
+    const el = document.getElementById('section-contact');
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -155,7 +382,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-neutral-50">
+    <>
+      {showIntro && (
+        <IntroScreen onEnter={() => { history.replaceState(null, '', '/'); setShowIntro(false); }} />
+      )}
+      <div style={{ opacity: showIntro ? 0 : 1, pointerEvents: showIntro ? 'none' : 'auto' }}>
+      <div className="w-full">
       {/* 按钮液态玻璃 SVG filter */}
       <svg className="hidden">
         <defs>
@@ -167,70 +399,275 @@ export default function Home() {
           </filter>
         </defs>
       </svg>
-      <Component
-        color="rgba(128, 128, 128, 1)"
-        animation={{ scale: 100, speed: 90 }}
-        noise={{ opacity: 0.3, scale: 1.2 }}
-        sizing="fill"
-        style={{ minHeight: "100vh" }}
+
+      {/* 背景：fixed 固定在视口，z-index:0，不干扰滚动 */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundColor: '#fafafa' }}>
+        <Component
+          color="rgba(128, 128, 128, 1)"
+          animation={{ scale: 100, speed: 90 }}
+          noise={{ opacity: 0.3, scale: 1.2 }}
+          sizing="fill"
+          style={{ height: '100%' }}
+        />
+      </div>
+
+      {/* 导航栏：fixed 固定顶部，始终可见，背景透明 */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '18px 24px',
+        }}
       >
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20 text-center">
+        <div className="w-full" style={{ paddingLeft: '10vw' }}>
+          <Menu list={menus} />
+        </div>
+      </div>
 
-          {/* 欢迎语 */}
-          <WordPullUp
-            words="WELCOME TO MY PORTFOLIO"
-            className="glow-text text-xs tracking-[0.3em] text-gray-500 font-light"
-            framerProps={{
-              hidden: { y: 20, opacity: 0 },
-              show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+      {/* 可滚动内容：z-index:1，正常流，无 overflow 限制 */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* 第一屏：欢迎语 + 姓名 + 介绍 */}
+        <section id="section1" className="flex flex-col items-center justify-center min-h-screen px-6" style={{ paddingBottom: '60px', position: 'relative' }}>
+          {/* 插图：高度撑满第一屏，宽度自适应，完整显示 */}
+          <img
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/illustration.png`}
+            alt=""
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '0',
+              transform: 'translateX(-42%)',
+              height: '100%',
+              width: 'auto',
+              zIndex: 1,
+              pointerEvents: 'none',
+              userSelect: 'none',
+              mixBlendMode: 'multiply',
             }}
-            style={{ color: 'inherit' }}
           />
-
-          {/* 名字 */}
-          <h1
-            className="glow-text text-6xl md:text-7xl font-light text-gray-900 mb-7 tracking-widest"
-            style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
+          {/* 内容块：退场/复现动画受 isUnfolding 控制 */}
+          <motion.div
+            className="w-full text-left"
+            style={{ paddingTop: '60px', paddingLeft: '10vw', position: 'relative', zIndex: 2 }}
+            variants={{
+              show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeInOut' } },
+              hide: { opacity: 0, y: -40, transition: { duration: 0.8, ease: 'easeInOut' } },
+            }}
+            animate={isUnfolding ? 'hide' : 'show'}
           >
-            邓甯予
-          </h1>
+            {/* 主标题：WELCOME TO MY PORTFOLIO，分两行，左对齐 */}
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+              <WordPullUp
+                words="WELCOME TO MY"
+                className="glow-text font-bold text-gray-300 text-left leading-tight tracking-[0.15em]"
+                framerProps={{
+                  hidden: { y: 20, opacity: 0 },
+                  show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                }}
+                style={{ color: 'inherit', fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif", fontSize: '28px', wordSpacing: '1.2em' }}
+              />
+              <WordPullUp
+                words="PORTFOLIO"
+                className="glow-text font-bold text-gray-300 text-left leading-tight tracking-[0.15em]"
+                framerProps={{
+                  hidden: { y: 20, opacity: 0 },
+                  show: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut", delay: 0.15 } }
+                }}
+                style={{ color: 'inherit', fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif", fontSize: '40px', wordSpacing: '1.2em' }}
+              />
+            </div>
+            {/* 副标题：邓甯予 */}
+            <h1
+              className="glow-text text-5xl md:text-6xl font-light text-gray-900 mt-10 mb-5 tracking-widest"
+              style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
+            >
+              邓甯予
+            </h1>
+            {/* 正文介绍 */}
+            <p
+              className="glow-text text-gray-700 text-sm md:text-base leading-8"
+              style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
+            >
+              南开大学文学硕士
+              <br />
+              对运营与商业化感兴趣 · 现实习于新浪微博
+              <br />
+              <span style={{ fontSize: '0.85em' }}>「用研究网文与流行文化的眼光做内容，用数据验证每一个判断」</span>
+            </p>
 
-          {/* 介绍 */}
-          <p
-            className="glow-text text-gray-700 text-sm md:text-base leading-8 max-w-xl mb-8"
-            style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
-          >
-            INTJ · 南开大学文艺学硕士，研究网络文学与流行文化美学
-            <br />
-            长期深耕内容运营与IP方向，寻找内容运营/产品运营方向的工作机会
-          </p>
+            {/* Unfold 跳转按钮 */}
+            <UnfoldButton onUnfold={handleUnfold} />
+          </motion.div>
+        </section>
 
-          {/* 三个卡片 */}
-          <div className="flex flex-row justify-center items-center gap-8 mb-14 mt-6 flex-wrap">
-            {cards.map((card) => (
-              <BentoItem
-                key={card.href}
-                onClick={() => router.push(card.href)}
-                delay={card.delay}
-                index={card.index}
-              >
-                <span className="text-2xl">{card.emoji}</span>
-                <span
-                  className="text-gray-700 text-base font-medium"
-                  style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
+        {/* 第二屏：引导文字 + 三个卡片 */}
+        <section id="section2" className="flex flex-col items-center justify-center min-h-screen px-6 gap-10">
+          {/* 引导文字 + 卡片整体容器，左对齐与卡片左边缘一致 */}
+          <div className="flex flex-col gap-6" style={{ alignItems: 'flex-start', marginLeft: '10vw' }}>
+            {/* 引导文字：第二屏登场动画，延迟 0.4s；隐藏时立即消失 */}
+            <motion.div
+              initial="hide"
+              variants={{
+                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0.4 } },
+                hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn', delay: 0 } },
+              }}
+              animate={cardsVisible ? 'show' : 'hide'}
+              style={{ margin: 0, marginBottom: '56px' }}
+            >
+              {startAnimation && (
+                <GradualSpacing
+                  key="play"
+                  text="Start where you're curious."
+                  className="text-left font-bold glow-text"
+                  style={{
+                    fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
+                    fontSize: '32px',
+                    color: '#2a2010',
+                    letterSpacing: '0.12em',
+                  }}
+                />
+              )}
+            </motion.div>
+
+            {/* 三个卡片：依次错落出现，每张延迟 0.15s */}
+            <div className="flex flex-row justify-center items-center gap-8 flex-wrap">
+              {cards.map((card, i) => (
+                /* 外层：浮现动画（不变） */
+                <motion.div
+                  key={card.href}
+                  initial="hide"
+                  variants={{
+                    show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0.4 + 0.15 * (i + 1) } },
+                    hide: { opacity: 0, y: 40, filter: 'blur(6px)', transition: { duration: 0.25, ease: 'easeIn', delay: 0 } },
+                  }}
+                  animate={cardsVisible ? 'show' : 'hide'}
                 >
-                  {card.title}
-                </span>
-                <span className="font-sans text-gray-700 text-xs">{card.desc}</span>
-                <span className="font-sans text-gray-700 text-sm mt-0.5 group-hover:text-gray-900 transition-colors">
-                  →
-                </span>
-              </BentoItem>
-            ))}
+                  <motion.div
+                    animate={clickedCard === card.href
+                      ? { scale: 1.05, opacity: 0 }
+                      : { scale: 1, opacity: 1 }
+                    }
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  >
+                    <BentoItem delay={card.delay} index={card.index} onClick={() => handleCardClick(card)}>
+                      <span
+                        className="text-gray-700 text-base font-medium"
+                        style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif", textAlign: 'center', display: 'block', width: '100%' }}
+                      >
+                        {card.title}
+                      </span>
+                      <span
+                        style={{
+                          display: 'block',
+                          width: '100%',
+                          fontSize: '12px',
+                          color: '#5a5040',
+                          fontWeight: 600,
+                          fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
+                          letterSpacing: '0.08em',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {card.sub}
+                      </span>
+                    </BentoItem>
+                  </motion.div>
+                </motion.div>
+              ))}
+            </div>
           </div>
+        </section>
 
-          {/* 联系方式 */}
-          <div className="flex flex-row gap-4 items-center">
+        {/* 第三屏：文章作品集 */}
+        <section id="section3" className="flex items-center justify-center min-h-screen px-6" style={{ overflow: 'hidden' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '40px', width: '100%' }}>
+            <motion.div
+              initial="hide"
+              animate={section3Visible ? 'show' : 'hide'}
+              variants={{
+                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0 } },
+                hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+              }}
+              style={{ flex: '0 0 auto' }}
+            >
+              <RevealImageList />
+            </motion.div>
+            <motion.div
+              initial="hide"
+              animate={section3Visible ? 'show' : 'hide'}
+              variants={{
+                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0.15 } },
+                hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+              }}
+              style={{ flex: '1 1 0', minWidth: 0, display: 'flex', justifyContent: 'flex-start', paddingRight: '80px' }}
+            >
+              <LandingAccordionItem />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 第四屏：项目作品集 */}
+        <section id="section4" className="flex flex-col items-center justify-center min-h-screen px-6">
+          <motion.div
+            initial="hide"
+            animate={section4Visible ? 'show' : 'hide'}
+            variants={{
+              show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut' } },
+              hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+            }}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}
+          >
+            <ProjectShowcase />
+          </motion.div>
+        </section>
+
+        {/* 第五屏：自媒体经历 */}
+        <section id="section5" className="relative w-full">
+          <motion.div
+            initial="hide"
+            animate={section5Visible ? 'show' : 'hide'}
+            variants={{
+              show: { opacity: 1, transition: { duration: 0.8, ease: 'easeOut' } },
+              hide: { opacity: 0, transition: { duration: 0.25, ease: 'easeIn' } },
+            }}
+          >
+            <Section5 />
+          </motion.div>
+        </section>
+
+        {/* 最末屏：联系方式 */}
+        <section id="section-contact" className="flex flex-col items-center justify-center min-h-screen px-6 gap-8">
+          <motion.p
+            initial="hide"
+            animate={contactVisible ? 'show' : 'hide'}
+            variants={{
+              show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0 } },
+              hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+            }}
+            style={{
+              fontSize: '18px',
+              color: '#7a7060',
+              fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
+              letterSpacing: '0.12em',
+              margin: 0,
+            }}
+          >
+            Get in touch.
+          </motion.p>
+          <motion.div
+            initial="hide"
+            animate={contactVisible ? 'show' : 'hide'}
+            variants={{
+              show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0.15 } },
+              hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+            }}
+            className="flex flex-row gap-4 items-center"
+          >
             <ShimmerButton
               background="radial-gradient(ellipse at 50% 0%, rgba(80,75,70,0.95) 0%, rgba(35,33,30,1) 60%)"
               shimmerColor="#c8a96e"
@@ -253,10 +690,12 @@ export default function Home() {
                 Tel: 15173184161
               </span>
             </ShimmerButton>
-          </div>
+          </motion.div>
+        </section>
+      </div>
 
-        </div>
-      </Component>
     </div>
+      </div>
+    </>
   );
 }
