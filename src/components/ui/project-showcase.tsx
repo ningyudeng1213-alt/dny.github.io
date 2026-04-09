@@ -3,7 +3,11 @@
 import { useState, useEffect } from 'react';
 
 const ITEM_AUTO_ROTATE_MS = 7000;
-const FORTUNE_IMAGE_FINE_TUNE_SCALE = 0.94;
+const SECONDARY_IMAGE_FINE_TUNE_SCALE = 0.94;
+const SHOWCASE_FRAME_WIDTH = 720;
+const SHOWCASE_FRAME_HEIGHT = 412;
+const SHOWCASE_GROUP_SHIFT_X = -24;
+const SHOWCASE_GROUP_SHIFT_Y = 24;
 
 const items = [
   {
@@ -24,7 +28,7 @@ const items = [
     title: "Coming Soon",
     description: "敬请期待",
     images: [
-      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/strategy1.jpg`, alt: "Coming Soon" },
+      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/Coming%20soon.jpg`, alt: "Coming Soon" },
     ],
   },
 ];
@@ -114,7 +118,7 @@ export function ProjectShowcase() {
       </div>
 
       {/* Right: auto-rotating image */}
-      <div style={{ flex: '1 1 0', position: 'relative' }}>
+      <div style={{ flex: '1 1 0', position: 'relative', transform: `translate(${SHOWCASE_GROUP_SHIFT_X}px, ${SHOWCASE_GROUP_SHIFT_Y}px)` }}>
 
         {/* Tickets Diary: in-flow, auto height, transparent */}
         <style>{`
@@ -128,18 +132,24 @@ export function ProjectShowcase() {
             opacity: activeIndex === 0 ? 1 : 0,
             transition: 'opacity 0.9s ease',
             pointerEvents: activeIndex === 0 ? 'auto' : 'none',
-            width: '720px',
+            width: `${SHOWCASE_FRAME_WIDTH}px`,
+            height: `${SHOWCASE_FRAME_HEIGHT}px`,
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
             animation: 'float 5s ease-in-out infinite',
             filter: 'drop-shadow(0 32px 64px rgba(0,0,0,0.28)) drop-shadow(0 8px 24px rgba(0,0,0,0.18)) drop-shadow(0 2px 6px rgba(0,0,0,0.10))',
           }}
         >
           <a
-            href="https://ticketsdiary-dny-portfo.netlify.app"
+            href="/TicketsDiary_Portfolio/"
             target="_blank"
             rel="noopener noreferrer"
             style={{
               display: 'block',
               position: 'relative',
+              width: '100%',
+              height: '100%',
               transition: 'opacity 0.9s ease',
             }}
           >
@@ -148,9 +158,10 @@ export function ProjectShowcase() {
               alt={items[0].images[0].alt}
               style={{
                 display: 'block',
-                width: '720px',
-                height: 'auto',
+                width: '100%',
+                height: '100%',
                 objectFit: 'contain',
+                objectPosition: 'left top',
                 cursor: 'pointer',
               }}
             />
@@ -163,31 +174,42 @@ export function ProjectShowcase() {
             position: 'absolute',
             top: 0,
             left: 0,
-            width: '720px',
+            width: `${SHOWCASE_FRAME_WIDTH}px`,
+            height: `${SHOWCASE_FRAME_HEIGHT}px`,
             opacity: activeIndex === 0 ? 0 : 1,
             transition: 'opacity 0.9s ease',
             pointerEvents: activeIndex === 0 ? 'none' : 'auto',
           }}
         >
-          {items.slice(1).map((item, i) => (
-            <img
-              key={`${i + 1}-0`}
-              src={item.images[0].src}
-              alt={item.images[0].alt}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '720px',
-                height: 'auto',
-                objectFit: 'contain',
-                transform: item.title === 'Fortune Trinkets' ? `scale(${FORTUNE_IMAGE_FINE_TUNE_SCALE})` : 'scale(1)',
-                transformOrigin: 'top left',
-                opacity: activeIndex === i + 1 ? 1 : 0,
-                transition: 'opacity 0.9s ease, transform 0.9s ease',
-              }}
-            />
-          ))}
+          {items.slice(1).map((item, i) => {
+            const href = item.title === 'Fortune Trinkets' ? '/Bmsc_Portfolio/' : undefined;
+            const img = (
+              <img
+                key={`${i + 1}-0`}
+                src={item.images[0].src}
+                alt={item.images[0].alt}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: item.title === 'Fortune Trinkets' ? 'left top' : 'center top',
+                  transform: `scale(${SECONDARY_IMAGE_FINE_TUNE_SCALE})`,
+                  transformOrigin: item.title === 'Fortune Trinkets' ? 'left top' : 'center top',
+                  opacity: activeIndex === i + 1 ? 1 : 0,
+                  transition: 'opacity 0.9s ease, transform 0.9s ease',
+                  cursor: href ? 'pointer' : 'default',
+                }}
+              />
+            );
+            return href ? (
+              <a key={`${i + 1}-link`} href={href} target="_blank" rel="noopener noreferrer" style={{ display: 'block', position: 'absolute', inset: 0 }}>
+                {img}
+              </a>
+            ) : img;
+          })}
         </div>
 
       </div>
