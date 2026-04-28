@@ -62,7 +62,7 @@ export default function MusicPlayer() {
           }}
         >
           <Image
-            src={`${basePath}/disc.png`}
+            src={`${basePath}/disc.webp`}
             alt="disc"
             width={50}
             height={50}

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工于细腻的《好东西》</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper: #e8eaee;
+  --ink: #12151c;
+  --ink-soft: #2e3340;
+  --muted: #7a8294;
+  --rule: #c0c6d4;
+  --accent: #2e5fa3;
+  --accent-warm: #5b8fd4;
+  --cream: #dde0e8;
+  --dark: #0d1018;
+  --dark2: #161b28;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.8;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 22px 48px;
+  background: linear-gradient(to bottom, var(--paper) 60%, transparent);
+}
+
+nav .back {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+nav .back:hover { color: var(--ink); }
+nav .back::before { content: '←'; font-size: 13px; }
+
+/* HERO */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 130px 48px 0;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.1s;
+}
+
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+.tag.accent { border-color: var(--accent); color: var(--accent); }
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 5vw, 68px);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.2s;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+
+.hero-sub {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: 52px;
+  max-width: 600px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.3s;
+}
+
+/* HERO GRID */
+.hero-body {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 56px;
+  align-items: start;
+  margin-bottom: 72px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.4s;
+}
+
+.hero-abstract {
+  border-left: 2px solid var(--accent);
+  padding-left: 28px;
+}
+
+.hero-abstract .label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: 16px;
+}
+
+.hero-abstract p {
+  font-size: 17px;
+  color: var(--ink-soft);
+  line-height: 1.9;
+}
+
+/* Score card */
+.score-card {
+  background: var(--dark2);
+  padding: 28px;
+  color: var(--paper);
+}
+
+.score-card .card-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.score-main {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.score-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--accent-warm);
+  line-height: 1;
+}
+
+.score-unit {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.score-desc {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.score-divider { height: 1px; background: #2a3040; margin-bottom: 20px; }
+
+.score-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.score-fact {}
+.score-fact-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--paper);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.score-fact-desc {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+/* DIVIDER */
+.section-rule {
+  max-width: 1100px;
+  margin: 0 auto 64px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.section-rule .rule-line { flex: 1; height: 1px; background: var(--rule); }
+.section-rule .rule-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* DEBATE SECTION */
+.debate-section {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 48px;
+}
+
+.debate-section .sec-header {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+.sec-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.debate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 24px;
+}
+
+.debate-col {
+  padding: 28px;
+  background: var(--cream);
+}
+
+.debate-col.negative { background: #dde0e8; }
+.debate-col.positive { background: #d4dae8; }
+
+.debate-col-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.debate-col.negative .debate-col-label { color: #a05050; }
+.debate-col.positive .debate-col-label { color: var(--accent); }
+
+.debate-voices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.debate-voice {
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  padding-left: 14px;
+  position: relative;
+}
+
+.debate-voice::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  color: var(--rule);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.debate-note {
+  background: var(--dark2);
+  padding: 20px 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--accent-warm);
+  line-height: 1.7;
+}
+
+/* CORE QUESTION */
+.question-section {
+  background: var(--dark2);
+  padding: 80px 48px;
+  margin-bottom: 80px;
+}
+
+.question-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.question-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+.question-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.question-item {
+  border-left: 1px solid var(--accent);
+  padding-left: 24px;
+}
+
+.question-item .q-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: 12px;
+}
+
+.question-item blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--paper);
+  line-height: 1.65;
+}
+
+/* ANALYSIS ANGLE */
+.angle-section {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.angle-left .angle-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.angle-left h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.angle-right p {
+  font-size: 17px;
+  color: var(--ink-soft);
+  line-height: 1.9;
+  margin-bottom: 18px;
+}
+.angle-right p:last-of-type { margin-bottom: 0; }
+
+.angle-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.angle-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+/* FOOTER */
+.page-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 48px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--rule);
+}
+
+.footer-info {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  line-height: 1.9;
+}
+
+.read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 14px 28px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.read-btn:hover { background: var(--accent); }
+
+/* ANIM */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.anim { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.anim.visible { opacity: 1; transform: none; }
+
+/* RESPONSIVE */
+@media (max-width: 860px) {
+  nav, .hero, .section-rule, .debate-section, .angle-section, .page-footer {
+    padding-left: 24px; padding-right: 24px;
+  }
+  .hero-body, .debate-grid, .question-grid, .angle-section {
+    grid-template-columns: 1fr;
+  }
+  .question-section { padding: 48px 24px; }
+  .page-footer { flex-direction: column; align-items: flex-start; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="back">Article Works</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-meta">
+    <span class="tag accent">Film Criticism</span>
+    <span class="tag">Short Essay</span>
+    <span class="tag">Gender Studies</span>
+    <span class="tag">Reception Theory</span>
+  </div>
+
+  <h1>工于细腻的<br>《<em>好东西</em>》</h1>
+  <p class="hero-sub">社会议题的有机融合与当代叙事的突破——当"好东西"本身成为问题</p>
+
+  <div class="hero-body">
+    <div class="hero-abstract">
+      <div class="label">选题逻辑 · Content Rationale</div>
+      <p>
+        这篇文章的起点不是"《好东西》好不好"，而是：
+        为什么一部让人发出"像回到母亲子宫"观影感叹的电影，
+        同时被人痛斥为"咪蒙化"和"脱口秀专场"？
+        两极分化本身就是内容现象——研究这种分裂，
+        比给电影贴标签更有内容价值。
+        从选题角度看，争议性内容的传播机制正是内容运营最需要理解的核心命题。
+      </p>
+    </div>
+
+    <div class="score-card">
+      <div class="card-label">文章背景数据</div>
+      <div class="score-main">
+        <span class="score-num">9.1</span>
+        <span class="score-unit">/ 10</span>
+      </div>
+      <div class="score-desc">豆瓣开分<br>2024华语电影评分最高</div>
+      <div class="score-divider"></div>
+      <div class="score-facts">
+        <div class="score-fact">
+          <div class="score-fact-num">7亿+</div>
+          <div class="score-fact-desc">最终票房收官</div>
+        </div>
+        <div class="score-fact">
+          <div class="score-fact-num">8.9</div>
+          <div class="score-fact-desc">2025年回看最终评分<br>仍位列年度榜首</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- DIVIDER -->
+<div class="section-rule anim">
+  <div class="rule-line"></div>
+  <div class="rule-label">舆论场分析 · Reception Analysis</div>
+  <div class="rule-line"></div>
+</div>
+
+<!-- DEBATE -->
+<section class="debate-section anim">
+  <div class="sec-header">
+    <span class="sec-label">Research Starting Point</span>
+    <span class="sec-title">两极分化的声音</span>
+  </div>
+
+  <div class="debate-grid">
+    <div class="debate-col negative">
+      <div class="debate-col-label">批评声音</div>
+      <div class="debate-voices">
+        <div class="debate-voice">小红书金句式表演合集</div>
+        <div class="debate-voice">导演的脱口秀专场</div>
+        <div class="debate-voice">咪蒙化，台词堆砌的标签拼盘</div>
+        <div class="debate-voice">放弃了视听艺术和电影叙事</div>
+      </div>
+    </div>
+    <div class="debate-col positive">
+      <div class="debate-col-label">共鸣声音</div>
+      <div class="debate-voices">
+        <div class="debate-voice">像回到母亲子宫般的观影体验</div>
+        <div class="debate-voice">《好东西》真是好东西</div>
+        <div class="debate-voice">女性主义电影的新维度</div>
+        <div class="debate-voice">信息量巨大，值得反复看</div>
+      </div>
+    </div>
+  </div>
+  <div class="debate-note">
+    → 本文研究起点：两极分化本身即是内容现象，争议性内容如何在分裂的舆论场中维持高热度并跻身年度佳作？
+  </div>
+</section>
+
+<!-- CORE QUESTION -->
+<section class="question-section">
+  <div class="question-inner">
+    <div class="question-label">核心研究问题 · Core Questions</div>
+    <div class="question-grid">
+      <div class="question-item">
+        <div class="q-label">问题一</div>
+        <blockquote>
+          《好东西》中被称为"好东西"的，仅仅是对当下女性主义浪潮的戏谑式总结，还是以电影艺术的形式创造了真正新的东西？
+        </blockquote>
+      </div>
+      <div class="question-item">
+        <div class="q-label">问题二</div>
+        <blockquote>
+          "女性主义"的先锋性，是否注定要在电影领域以有别于传统的表达形式出现？这是形式的革新还是艺术的妥协？
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANGLE -->
+<section class="angle-section anim">
+  <div class="angle-left">
+    <div class="angle-label">内容运营视角</div>
+    <h3>争议即传播：爆款内容的舆论生态学</h3>
+  </div>
+  <div class="angle-right">
+    <p>
+      《好东西》是2024年最典型的"争议性爆款"——它同时触发了极度认同与极度反感，
+      两种情绪都在驱动内容的持续传播。这种现象在内容运营中有明确的规律：
+      真正高传播的内容往往不是让所有人满意的内容，而是让不同群体都有话说的内容。
+    </p>
+    <p>
+      这篇文章尝试用电影批评的工具解析这一传播现象的内容逻辑，
+      追问"为什么两极分化反而促成了影片的目的"——这个问题的答案，
+      同样适用于理解任何在争议中出圈的内容产品。
+    </p>
+    <div class="angle-tags">
+      <span class="angle-tag">争议内容分析</span>
+      <span class="angle-tag">舆论周期研究</span>
+      <span class="angle-tag">女性受众洞察</span>
+      <span class="angle-tag">接受理论</span>
+      <span class="angle-tag">社交媒体传播</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="page-footer anim">
+  <div class="footer-info">
+    邓甯予 · 南开大学文艺学硕士<br>
+    研究方向：大众文艺美学（网文、电影方向）<br>
+    短评引言 · 电影批评写作
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.anim').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

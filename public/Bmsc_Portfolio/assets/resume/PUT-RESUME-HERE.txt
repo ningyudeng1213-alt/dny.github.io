@@ -1,0 +1,6 @@
+Put your PDF resume in this folder and rename it to:
+
+deng-ningyu-resume.pdf
+
+Then the "download resume" button in index.html and bmww_case_study.html
+will download it directly.

@@ -4,13 +4,15 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Component } from "@/components/ui/etheral-shadow";
 import { WordPullUp } from "@/components/ui/word-pull-up";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
 import Menu from "@/components/ui/navbar";
-import { RevealImageList, DemoList } from "@/components/ui/reveal-images";
+import { RevealImageList } from "@/components/ui/reveal-images";
 import { ProjectShowcase } from "@/components/ui/project-showcase";
 import { LandingAccordionItem } from "@/components/ui/interactive-image-accordion";
 import { GradualSpacing } from "@/components/ui/gradual-spacing";
 import { IntroScreen } from "@/components/ui/intro-screen";
+import ImageStackDemo from "@/components/ui/polaroid-flick-through";
+import { ContactTicker } from "@/components/ui/contact-ticker";
+import { FloatingContactScene } from "@/components/ui/floating-contact-scene";
 
 const BentoItem = ({
   children,
@@ -140,8 +142,8 @@ const menus = [
     url: '/works',
     dropdown: true,
     items: [
-      { id: 21, title: 'Article', url: '/works/article' },
-      { id: 22, title: 'Demo', url: '/works/demo' },
+      { id: 21, title: 'Article', url: '/#section3', scrollTo: 'section3' },
+      { id: 22, title: 'Demo', url: '/#section4', scrollTo: 'section4' },
     ],
   },
   {
@@ -150,9 +152,8 @@ const menus = [
     url: '/about',
     dropdown: true,
     items: [
-      { id: 31, title: 'Media', url: '/about/media' },
-      { id: 32, title: 'Photo', url: '/about/photo' },
-      { id: 33, title: 'Cook', url: '/about/cook' },
+      { id: 31, title: 'Media', url: '/#section4-blank', scrollTo: 'section4-blank' },
+      { id: 32, title: 'Photo', url: '/#section6-floating', scrollTo: 'section6-floating' },
     ],
   },
   { id: 4, title: 'Resume', url: '/resume', scrollTo: 'section-contact' },
@@ -161,7 +162,7 @@ const menus = [
 const cards = [
   { title: "文章作品集", sub: "Academic Writing & Content Creation", href: "/articles", delay: 0, index: 0, sectionId: 'section3', back: 'To be continued...' },
   { title: "项目作品集", sub: "Operation Projects & Case Studies", href: "/projects", delay: 1, index: 1, sectionId: 'section4', back: 'To be continued...' },
-  { title: "自媒体经历", sub: "Social Media & Content Strategy", href: "/social", delay: 2, index: 2, sectionId: 'section5', back: 'To be continued...' },
+  { title: "自媒体经历", sub: "Social Media & Content Strategy", href: "/#section4-blank", delay: 2, index: 2, sectionId: 'section4-blank', back: 'To be continued...' },
 ];
 
 function Section5() {
@@ -198,6 +199,83 @@ function Section5() {
     </div>
   );
 }
+
+function Section4Blank() {
+  const [allClicked, setAllClicked] = React.useState(false);
+
+  return (
+    <div
+      className="grid w-full items-center gap-10"
+      style={{
+        gridTemplateColumns: '320px minmax(0,1fr) 280px',
+        paddingLeft: 'calc(10vw + 24px)',
+        paddingRight: '4vw',
+      }}
+    >
+      <motion.div
+        initial={false}
+        animate={allClicked ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        style={{ pointerEvents: allClicked ? 'auto' : 'none' }}
+      >
+        <h3
+          className="text-sm font-black uppercase"
+          style={{
+            fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
+            color: '#7a7060',
+            letterSpacing: '0.12em',
+            margin: '0 0 20px',
+          }}
+        >
+          Media
+        </h3>
+        <p
+          style={{
+            fontFamily: "Georgia, 'Songti SC', STSong, serif",
+            color: '#2a2010',
+            fontSize: '16px',
+            lineHeight: 1.9,
+            margin: 0,
+          }}
+        >
+          小红书自媒体"知识分享"型账号 积累2k+粉丝，擅长用内容打动读者、以情绪洞察为突破引流
+        </p>
+      </motion.div>
+
+      <div style={{ width: '100%', minWidth: 0, transform: 'translateX(-160px)' }}>
+        <ImageStackDemo onAllViewedChange={setAllClicked} />
+      </div>
+
+      <div style={{ transform: 'translateX(-160px)' }}>
+        <h3
+          className="text-sm font-black uppercase"
+          style={{
+            fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
+            color: '#7a7060',
+            letterSpacing: '0.12em',
+            margin: '0 0 20px',
+          }}
+        >
+          Personal Experience
+        </h3>
+        <p
+          style={{
+            fontFamily: "Georgia, 'Songti SC', STSong, serif",
+            color: '#2a2010',
+            fontSize: '16px',
+            lineHeight: 1.9,
+            margin: 0,
+          }}
+        >
+          本科期间尝试校园「每日鲜花」地推并达周利润 <span style={{ fontFamily: 'Arial, sans-serif', fontVariantNumeric: 'lining-nums' }}>700</span> 元
+          <br />
+          研究生期间经营文玩自媒体账号并实现零投流GMV达 <span style={{ fontFamily: 'Arial, sans-serif', fontVariantNumeric: 'lining-nums' }}>3</span> 万
+        </p>
+      </div>
+    </div>
+  );
+}
+
 
 const UnfoldButton = ({ onUnfold }: { onUnfold: () => void }) => {
   const [hovered, setHovered] = React.useState(false);
@@ -238,6 +316,8 @@ export default function Home() {
   useEffect(() => {
     if (sessionStorage.getItem('skipIntro')) {
       sessionStorage.removeItem('skipIntro');
+      // Keep existing skip-intro behavior; this state sync is intentional on first mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowIntro(false);
       const hash = window.location.hash;
       if (hash) {
@@ -257,8 +337,22 @@ export default function Home() {
   const [hasAnimated, setHasAnimated] = React.useState(false);
   const [section3Visible, setSection3Visible] = React.useState(false);
   const [section4Visible, setSection4Visible] = React.useState(false);
+  const [section4BlankVisible, setSection4BlankVisible] = React.useState(false);
   const [section5Visible, setSection5Visible] = React.useState(false);
+  const [section6Visible, setSection6Visible] = React.useState(false);
   const [contactVisible, setContactVisible] = React.useState(false);
+  const [contactTitleHovered, setContactTitleHovered] = React.useState(false);
+  const contactItems = React.useMemo(
+    () => [
+      { label: 'EMAIL', value: 'dny2026@126.com', href: 'mailto:dny2026@126.com' },
+      { label: 'TEL', value: '15173184161', href: 'tel:15173184161' },
+      { label: 'Wechat', value: 'Anyd_1213', copyable: true },
+      { label: 'EMAIL', value: 'dny2026@126.com', href: 'mailto:dny2026@126.com' },
+      { label: 'TEL', value: '15173184161', href: 'tel:15173184161' },
+      { label: 'Wechat', value: 'Anyd_1213', copyable: true },
+    ],
+    []
+  );
 
 
   useEffect(() => {
@@ -355,6 +449,26 @@ export default function Home() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
+      (entries) => { setSection4BlankVisible(entries[0].isIntersecting); },
+      { threshold: 0.25 }
+    );
+    const el = document.getElementById('section4-blank');
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => { setSection6Visible(entries[0].isIntersecting); },
+      { threshold: 0.25 }
+    );
+    const el = document.getElementById('section6-floating');
+    if (el) observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
       (entries) => { setContactVisible(entries[0].isIntersecting); },
       { threshold: 0.3 }
     );
@@ -372,8 +486,8 @@ export default function Home() {
         const y = ((e.clientY - rect.top) / rect.height) * 100;
         const elem = el as HTMLElement;
         elem.style.backgroundImage = `radial-gradient(circle 120px at ${x}% ${y}%, #c8a96e 0%, #3d3528 50%, #3d3528 100%)`;
-        (elem.style as any).webkitBackgroundClip = 'text';
-        (elem.style as any).webkitTextFillColor = 'transparent';
+        elem.style.setProperty('-webkit-background-clip', 'text');
+        elem.style.setProperty('-webkit-text-fill-color', 'transparent');
         elem.style.backgroundClip = 'text';
       });
     };
@@ -384,9 +498,14 @@ export default function Home() {
   return (
     <>
       {showIntro && (
-        <IntroScreen onEnter={() => { history.replaceState(null, '', '/'); setShowIntro(false); }} />
+        <IntroScreen
+          onEnter={() => {
+            history.replaceState(null, '', '/');
+            setShowIntro(false);
+          }}
+        />
       )}
-      <div style={{ opacity: showIntro ? 0 : 1, pointerEvents: showIntro ? 'none' : 'auto' }}>
+      <div style={{ pointerEvents: showIntro ? 'none' : 'auto' }}>
       <div className="w-full">
       {/* 按钮液态玻璃 SVG filter */}
       <svg className="hidden">
@@ -435,7 +554,7 @@ export default function Home() {
         <section id="section1" className="flex flex-col items-center justify-center min-h-screen px-6" style={{ paddingBottom: '60px', position: 'relative' }}>
           {/* 插图：高度撑满第一屏，宽度自适应，完整显示 */}
           <img
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/illustration.png`}
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/illustration.webp`}
             alt=""
             style={{
               position: 'absolute',
@@ -493,7 +612,7 @@ export default function Home() {
               className="glow-text text-gray-700 text-sm md:text-base leading-8"
               style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
             >
-              南开大学文学硕士
+              南开大学文学硕士 · 26年应届毕业生
               <br />
               对运营与商业化感兴趣 · 现实习于新浪微博
               <br />
@@ -508,7 +627,7 @@ export default function Home() {
         {/* 第二屏：引导文字 + 三个卡片 */}
         <section id="section2" className="flex flex-col items-center justify-center min-h-screen px-6 gap-10">
           {/* 引导文字 + 卡片整体容器，左对齐与卡片左边缘一致 */}
-          <div className="flex flex-col gap-6" style={{ alignItems: 'flex-start', marginLeft: '10vw' }}>
+          <div className="flex flex-col gap-6" style={{ alignItems: 'flex-start' }}>
             {/* 引导文字：第二屏登场动画，延迟 0.4s；隐藏时立即消失 */}
             <motion.div
               initial="hide"
@@ -626,6 +745,36 @@ export default function Home() {
           </motion.div>
         </section>
 
+        {/* 第四屏下新增屏：中央展示 Polaroid Flick Through 组件，沿用全站背景 */}
+        <section id="section4-blank" className="flex min-h-screen items-center justify-start overflow-hidden">
+          <motion.div
+            initial="hide"
+            animate={section4BlankVisible ? 'show' : 'hide'}
+            variants={{
+              show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut' } },
+              hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+            }}
+            style={{ width: '100%' }}
+          >
+            <Section4Blank />
+          </motion.div>
+        </section>
+
+        {/* 第五屏前新增：浮动联系方式屏 */}
+        <section id="section6-floating" className="flex min-h-screen items-center justify-center px-6 py-14">
+          <motion.div
+            initial="hide"
+            animate={section6Visible ? 'show' : 'hide'}
+            variants={{
+              show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut' } },
+              hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
+            }}
+            style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+          >
+            <FloatingContactScene />
+          </motion.div>
+        </section>
+
         {/* 第五屏：自媒体经历 */}
         <section id="section5" className="relative w-full">
           <motion.div
@@ -642,23 +791,34 @@ export default function Home() {
 
         {/* 最末屏：联系方式 */}
         <section id="section-contact" className="flex flex-col items-center justify-center min-h-screen px-6 gap-8">
-          <motion.p
+          <motion.a
+            href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/resume.pdf`}
+            download
             initial="hide"
             animate={contactVisible ? 'show' : 'hide'}
             variants={{
               show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0 } },
               hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
             }}
+            className="glow-text"
+            onMouseEnter={() => setContactTitleHovered(true)}
+            onMouseLeave={() => setContactTitleHovered(false)}
             style={{
-              fontSize: '18px',
+              fontSize: '24px',
+              fontWeight: 700,
               color: '#7a7060',
               fontFamily: "'Adobe Song Std', 'AdobeSongStd', serif",
               letterSpacing: '0.12em',
+              textShadow: contactTitleHovered ? '0 0 18px rgba(201,168,76,0.65)' : 'none',
+              transition: 'text-shadow 0.25s ease',
               margin: 0,
+              textDecoration: 'underline',
+              textUnderlineOffset: '5px',
+              cursor: 'pointer',
             }}
           >
             Get in touch.
-          </motion.p>
+          </motion.a>
           <motion.div
             initial="hide"
             animate={contactVisible ? 'show' : 'hide'}
@@ -666,30 +826,9 @@ export default function Home() {
               show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: 'easeOut', delay: 0.15 } },
               hide: { opacity: 0, y: 30, filter: 'blur(8px)', transition: { duration: 0.25, ease: 'easeIn' } },
             }}
-            className="flex flex-row gap-4 items-center"
+            className="w-full max-w-5xl"
           >
-            <ShimmerButton
-              background="radial-gradient(ellipse at 50% 0%, rgba(80,75,70,0.95) 0%, rgba(35,33,30,1) 60%)"
-              shimmerColor="#c8a96e"
-              shimmerDuration="2.5s"
-              borderRadius="100px"
-              className="px-5 py-2.5 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.5),0_2px_12px_rgba(0,0,0,0.25),0_0_0_0.5px_rgba(255,255,255,0.08)]"
-            >
-              <span className="font-sans text-white/80 text-xs tracking-widest">
-                Mail: dny2026@126.com
-              </span>
-            </ShimmerButton>
-            <ShimmerButton
-              background="radial-gradient(ellipse at 50% 0%, rgba(80,75,70,0.95) 0%, rgba(35,33,30,1) 60%)"
-              shimmerColor="#c8a96e"
-              shimmerDuration="2.5s"
-              borderRadius="100px"
-              className="px-5 py-2.5 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_0_rgba(0,0,0,0.5),0_2px_12px_rgba(0,0,0,0.25),0_0_0_0.5px_rgba(255,255,255,0.08)]"
-            >
-              <span className="font-sans text-white/80 text-xs tracking-widest">
-                Tel: 15173184161
-              </span>
-            </ShimmerButton>
+            <ContactTicker items={contactItems} />
           </motion.div>
         </section>
       </div>

@@ -220,6 +220,49 @@ section { padding:110px 0; position:relative; }
 }
 .hero-lead strong { color:var(--text); }
 
+.hero-site {
+  display:inline-flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px 14px;
+  max-width:980px;
+  margin-bottom:30px;
+  padding:14px 18px;
+  border:1px solid rgba(105,87,146,0.26);
+  border-radius:18px;
+  background:linear-gradient(145deg, rgba(145,124,190,0.18), rgba(249,246,255,0.9));
+  box-shadow:0 10px 24px rgba(60,44,92,0.08);
+}
+.hero-site-label,
+.hero-site-note {
+  font-family:var(--sans);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--text-mute);
+}
+.hero-site-link {
+  color:var(--gold);
+  text-decoration:none;
+  font-family:var(--sans);
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.02em;
+  word-break:break-all;
+  transition:color .25s ease, transform .25s ease;
+}
+.hero-site-link:hover {
+  color:var(--gold-2);
+  transform:translateY(-1px);
+}
+@media (max-width:760px) {
+  .hero-site {
+    display:flex;
+    align-items:flex-start;
+    padding:14px 16px;
+  }
+}
+
 .hero-focus {
   border:1px solid var(--line);
   border-radius:16px;
@@ -936,6 +979,11 @@ section { padding:110px 0; position:relative; }
       项目类型为五行命理✖️手串推荐 H5。<br>
       记录范围包括：首版问题、内测反馈、调整方向、主要改动、版本迭代与最终上线状态。
     </p>
+    <div class="hero-site">
+      <span class="hero-site-label">正式网址</span>
+      <a class="hero-site-link" href="https://benmingshouchuan.fun" target="_blank" rel="noreferrer">benmingshouchuan.fun</a>
+      <span class="hero-site-note">已备案，可直接访问</span>
+    </div>
     <div class="hero-focus">
       <div class="hero-focus-title">项目摘要</div>
       <div class="hero-focus-grid">
@@ -1219,35 +1267,35 @@ section { padding:110px 0; position:relative; }
 
     <div class="asset-grid reveal">
       <article class="asset asset--home">
-        <div class="thumb"><img src="./assets/pages/page-01-home.png" alt="上线首页" loading="lazy"></div>
+        <div class="thumb"><img src="./assets/pages/page-01-home.webp" alt="上线首页" loading="lazy"></div>
         <div class="meta">
           <h4>产品封面与首屏引导</h4>
           <p>展示最终上线版本的视觉和定位表达。</p>
         </div>
       </article>
       <article class="asset">
-        <div class="thumb"><img src="./assets/pages/page-02-quiz.png" alt="问卷主流程" loading="lazy"></div>
+        <div class="thumb"><img src="./assets/pages/page-02-quiz.webp" alt="问卷主流程" loading="lazy"></div>
         <div class="meta">
           <h4>问卷结构改版前后</h4>
           <p>体现从专业门槛题到用户语言题的结构演进。</p>
         </div>
       </article>
       <article class="asset">
-        <div class="thumb"><img src="./assets/pages/page-03-result.png" alt="结果页" loading="lazy"></div>
+        <div class="thumb"><img src="./assets/pages/page-03-result.webp" alt="结果页" loading="lazy"></div>
         <div class="meta">
           <h4>身份标签 + 推荐解释</h4>
           <p>突出“可认同 + 可分享”的产品目标。</p>
         </div>
       </article>
       <article class="asset">
-        <div class="thumb"><img src="./assets/pages/page-04-atlas-entry.png" alt="图鉴入口" loading="lazy"></div>
+        <div class="thumb"><img src="./assets/pages/page-04-atlas-entry.webp" alt="图鉴入口" loading="lazy"></div>
         <div class="meta">
           <h4>结果页到图鉴的路径</h4>
           <p>展示结果页入口与图鉴承接关系。</p>
         </div>
       </article>
       <article class="asset">
-        <div class="thumb"><img src="./assets/pages/page-05-match-unlock.png" alt="匹配值解锁页" loading="lazy"></div>
+        <div class="thumb"><img src="./assets/pages/page-05-match-unlock.webp" alt="匹配值解锁页" loading="lazy"></div>
         <div class="meta">
           <h4>指定手串匹配值</h4>
           <p>展示图鉴中解锁后的匹配值明细。</p>
@@ -1261,7 +1309,7 @@ section { padding:110px 0; position:relative; }
         </div>
       </article>
       <article class="asset">
-        <div class="thumb"><img src="./assets/pages/page-07-share-card.png" alt="分享卡片" loading="lazy"></div>
+        <div class="thumb"><img src="./assets/pages/page-07-share-card.webp" alt="分享卡片" loading="lazy"></div>
         <div class="meta">
           <h4>分享卡片</h4>
           <p>展示资料卡的最终内容版式与分享呈现效果。</p>
@@ -1288,7 +1336,13 @@ section { padding:110px 0; position:relative; }
         <div><span>邮箱</span><a href="mailto:dny2026@126.com">dny2026@126.com</a></div>
         <div><span>微信</span><b>Anyd_1213</b></div>
       </div>
-      <a class="about-cta" href="mailto:dny2026@126.com?subject=简历获取">一键下载简历（PDF）</a>
+      <a
+        class="about-cta"
+        href="./assets/resume/deng-ningyu-resume.pdf"
+        download="邓甯予-简历.pdf"
+        data-resume-link
+        data-fallback-mailto="mailto:dny2026@126.com?subject=简历获取"
+      >一键下载简历（PDF）</a>
     </article>
   </div>
 </section>
@@ -1330,6 +1384,26 @@ const tocObserver = new IntersectionObserver((entries) => {
 }, { rootMargin: "-40% 0px -52% 0px", threshold: 0 });
 
 sections.forEach((section) => tocObserver.observe(section));
+
+const resumeLink = document.querySelector("[data-resume-link]");
+
+if (resumeLink && window.location.protocol !== "file:") {
+  resumeLink.addEventListener("click", async (event) => {
+    try {
+      const response = await fetch(resumeLink.href, {
+        method: "HEAD",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("resume-missing");
+      }
+    } catch (error) {
+      event.preventDefault();
+      window.location.href = resumeLink.dataset.fallbackMailto;
+    }
+  });
+}
 </script>
 </body>
 </html>

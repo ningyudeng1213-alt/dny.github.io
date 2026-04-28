@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useId, useEffect, CSSProperties } from 'react';
+import React, { useRef, useId, useEffect, CSSProperties, useState } from 'react';
 import { animate, useMotionValue, AnimationPlaybackControls } from 'framer-motion';
 
 // Type definitions
@@ -65,7 +65,11 @@ export function Component({
     children
 }: ShadowOverlayProps) {
     const id = useInstanceId();
-    const animationEnabled = animation && animation.scale > 0;
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        setIsMobile(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+    }, []);
+    const animationEnabled = !isMobile && animation && animation.scale > 0;
     const feColorMatrixRef = useRef<SVGFEColorMatrixElement>(null);
     const hueRotateMotionValue = useMotionValue(180);
     const hueRotateAnimation = useRef<AnimationPlaybackControls | null>(null);
@@ -161,7 +165,7 @@ export function Component({
                 <div
                     style={{
                         backgroundColor: color,
-                        maskImage: `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`,
+                        maskImage: `url('/etheral-mask.webp')`,
                         maskSize: sizing === "stretch" ? "100% 100%" : "cover",
                         maskRepeat: "no-repeat",
                         maskPosition: "center",
@@ -182,7 +186,7 @@ export function Component({
                     style={{
                         position: "absolute",
                         inset: 0,
-                        backgroundImage: `url("https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png")`,
+                        backgroundImage: `url('/etheral-noise.png')`,
                         backgroundSize: noise.scale * 200,
                         backgroundRepeat: "repeat",
                         opacity: noise.opacity / 2

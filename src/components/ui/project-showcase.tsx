@@ -14,21 +14,21 @@ const items = [
     title: "Tickets Diary",
     description: "数字化票根墙：一款电子票根应用",
     images: [
-      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tickets-diary.png`, alt: "Tickets Diary" },
+      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tickets-diary.webp`, alt: "Tickets Diary" },
     ],
   },
   {
     title: "Fortune Trinkets",
     description: "本命手串推荐：一款结合五行命理与好运祝福的趣味测试",
     images: [
-      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/Fortune-Trinkets.png`, alt: "Fortune Trinkets" },
+      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/Fortune-Trinkets.webp`, alt: "Fortune Trinkets" },
     ],
   },
   {
     title: "Coming Soon",
     description: "敬请期待",
     images: [
-      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/Coming%20soon.jpg`, alt: "Coming Soon" },
+      { src: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/coming-soon.webp`, alt: "Coming Soon" },
     ],
   },
 ];
@@ -201,6 +201,7 @@ export function ProjectShowcase() {
                   opacity: activeIndex === i + 1 ? 1 : 0,
                   transition: 'opacity 0.9s ease, transform 0.9s ease',
                   cursor: href ? 'pointer' : 'default',
+                  pointerEvents: activeIndex === i + 1 ? 'auto' : 'none',
                 }}
               />
             );

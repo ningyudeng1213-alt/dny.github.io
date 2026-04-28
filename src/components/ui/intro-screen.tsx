@@ -31,13 +31,10 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
   const loadNumRef        = useRef<HTMLSpanElement>(null)
   const isTransitioning   = useRef(false)
 
-  useEffect(() => {
-    // 动态加载字体
-    const link = document.createElement('link')
-    link.href = 'https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Space+Mono&display=swap'
-    link.rel = 'stylesheet'
-    document.head.appendChild(link)
+  const isMobile = typeof window !== 'undefined' &&
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches
 
+  useEffect(() => {
     // enterBtn 由 GSAP xPercent/yPercent 负责居中
     gsap.set(enterBtnRef.current, { xPercent: -50, yPercent: -50 })
 
@@ -195,11 +192,10 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
         maxWidth: '100vw', maxHeight: '100vh',
         duration: 1.5, ease: 'expo.inOut',
         onComplete: () => {
-          // 全屏展开后，淡出整个 intro 层，让 page.tsx 从下方透出
-          // 两个版本的树图（灰色天空 vs 白色天空）自然交叉淡化，无白色闪烁
+          // intro 整体淡出，page 从底层透出，树杈上方灰色缓慢提亮为白色
           gsap.to(containerRef.current, {
             opacity: 0,
-            duration: 1.8,
+            duration: 0.7,
             ease: 'power2.inOut',
             onComplete: onEnter,
           })
@@ -218,7 +214,6 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
       centerBlock.removeEventListener('mouseleave', handleMouseLeave)
       centerBlock.removeEventListener('click', handleClick)
       window.removeEventListener('mousemove', handleGlobalMouseMove)
-      if (document.head.contains(link)) document.head.removeChild(link)
     }
   }, [onEnter])
 
@@ -227,7 +222,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
       position: 'fixed', inset: 0, zIndex: 9999,
       backgroundColor: '#fafafa',
       overflow: 'hidden',
-      fontFamily: "'Oswald', sans-serif",
+      fontFamily: "var(--font-oswald), sans-serif",
     }}>
       {/* SVG 液态扭曲滤镜 */}
       <svg style={{ display: 'none' }}>
@@ -247,7 +242,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
       {/* 右上角：LOADING ASSETS */}
       <div ref={loaderStatusRef} style={{
         position: 'absolute', top: '60px', right: '8vw',
-        fontFamily: "'Space Mono', monospace",
+        fontFamily: "var(--font-space-mono), monospace",
         fontSize: '10px', fontWeight: 'bold',
         textTransform: 'uppercase', letterSpacing: '0.05em',
         lineHeight: 1.2, color: '#0d0d0d', zIndex: 20,
@@ -259,7 +254,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
       {/* 左下角：数字计数器 */}
       <div ref={loaderCounterRef} style={{
         position: 'absolute', bottom: '60px', left: '8vw',
-        fontFamily: "'Space Mono', monospace",
+        fontFamily: "var(--font-space-mono), monospace",
         fontSize: '10px', fontWeight: 'bold',
         letterSpacing: '0.05em', lineHeight: 1.2,
         color: '#0d0d0d', zIndex: 20,
@@ -277,7 +272,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
           fontSize: 'clamp(36px, 6.5vw, 100px)', lineHeight: 0.85,
           fontStyle: 'italic', fontWeight: 700, letterSpacing: '-0.03em',
           color: '#0d0d0d', display: 'flex', flexDirection: 'column',
-          fontFamily: "'Oswald', sans-serif",
+          fontFamily: "var(--font-oswald), sans-serif",
           whiteSpace: 'nowrap', willChange: 'transform',
           opacity: 0,
         }}>
@@ -315,13 +310,13 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
                 position: 'absolute',
                 top: '50%', left: '50%',
                 width: '100vw', height: '100vh',
-                filter: 'url(#liquid-distortion)',
+                filter: isMobile ? 'none' : 'url(#liquid-distortion)',
               }}
             >
               {/* ===== 第一屏真实内容：与 page.tsx section1 完全一致 ===== */}
               <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden', backgroundColor: '#fafafa' }}>
 
-                {/* 背景层：与 page.tsx 完全相同的 EtherealShadow */}
+                {/* EtherealShadow 背景层：让树杈上方呈灰色，与第一屏过渡 */}
                 <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
                   <Component
                     color="rgba(128, 128, 128, 1)"
@@ -334,7 +329,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
 
                 {/* 插图：高度撑满第一屏，宽度自适应，完整显示 */}
                 <img
-                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/illustration.png`}
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/illustration.webp`}
                   alt=""
                   style={{
                     position: 'absolute',
@@ -392,7 +387,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
                       className="text-gray-700 text-sm md:text-base leading-8"
                       style={{ fontFamily: "Georgia, 'Songti SC', STSong, serif" }}
                     >
-                      南开大学文学硕士
+                      南开大学文学硕士 · 26年应届毕业生
                       <br />
                       对运营与商业化感兴趣 · 现实习于新浪微博
                       <br />
@@ -421,7 +416,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
             <div ref={enterBtnRef} style={{
               position: 'absolute', top: '50%', left: '50%',
               color: '#ffffff',
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "var(--font-space-mono), monospace",
               fontSize: '12px', letterSpacing: '0.15em',
               display: 'flex', alignItems: 'center', gap: '12px',
               zIndex: 10, pointerEvents: 'none',
@@ -441,7 +436,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
           fontSize: 'clamp(28px, 4.5vw, 72px)', lineHeight: 0.85,
           fontStyle: 'italic', fontWeight: 700, letterSpacing: '-0.03em',
           color: '#0d0d0d', display: 'flex', flexDirection: 'column',
-          fontFamily: "'Oswald', sans-serif",
+          fontFamily: "var(--font-oswald), sans-serif",
           whiteSpace: 'nowrap', willChange: 'transform',
           opacity: 0,
         }}>
