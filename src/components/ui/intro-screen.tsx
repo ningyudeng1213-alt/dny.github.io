@@ -95,7 +95,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
 
     // --- 阶段三：帷幕拉开 + 画中画窗口破土 ---
     .to(leftTextRef.current, {
-      left: '13vw', top: '50%', xPercent: 0, yPercent: -50,
+      left: '17vw', top: '50%', xPercent: 0, yPercent: -50,
       duration: 1.8, ease: 'expo.inOut',
     }, '+=0.2')
 
