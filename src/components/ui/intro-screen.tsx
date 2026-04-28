@@ -22,7 +22,6 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
   const centerBlockRef    = useRef<HTMLDivElement>(null)
   const mediaContainerRef = useRef<HTMLDivElement>(null)
   const innerContentRef   = useRef<HTMLDivElement>(null)   // 画中画内容容器（替代 video）
-  const displacementRef   = useRef<SVGFEDisplacementMapElement>(null)
   const enterBtnRef       = useRef<HTMLDivElement>(null)
   const leftSquareRef     = useRef<HTMLSpanElement>(null)
   const rightSquareRef    = useRef<HTMLSpanElement>(null)
@@ -30,9 +29,6 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
   const loaderCounterRef  = useRef<HTMLDivElement>(null)
   const loadNumRef        = useRef<HTMLSpanElement>(null)
   const isTransitioning   = useRef(false)
-
-  const isMobile = typeof window !== 'undefined' &&
-    window.matchMedia('(hover: none) and (pointer: coarse)').matches
 
   useEffect(() => {
     // enterBtn 由 GSAP xPercent/yPercent 负责居中
@@ -118,14 +114,12 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
 
     const handleMouseEnter = () => {
       if (isTransitioning.current) return
-      gsap.to(displacementRef.current, { attr: { scale: 60 }, duration: 1.2, ease: 'power3.out' })
       gsap.to(leftSquareRef.current,  { x:  10, duration: 0.6, ease: 'power2.out' })
       gsap.to(rightSquareRef.current, { x: -10, duration: 0.6, ease: 'power2.out' })
     }
 
     const handleMouseLeave = () => {
       if (isTransitioning.current) return
-      gsap.to(displacementRef.current, { attr: { scale: 0 }, duration: 1.2, ease: 'power3.out' })
       gsap.to(mediaContainerRef.current, { rotateY: 0, rotateX: 0, duration: 1, ease: 'power3.out' })
       // 画中画归位（x/y 是视差偏移量，归零即回到 xPercent/yPercent 中心）
       gsap.to(innerContentRef.current, { x: 0, y: 0, duration: 1, ease: 'power3.out' })
@@ -173,8 +167,6 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
         { opacity: 0, y: -30, duration: 0.8, ease: 'power3.inOut', stagger: 0.05 },
         0
       )
-      .to(displacementRef.current, { attr: { scale: 0 }, duration: 0.8, ease: 'power3.inOut' }, 0)
-
       // 2. 抹平 3D 倾斜
       .to(mediaContainerRef.current, { rotateY: 0, rotateX: 0, duration: 0.8, ease: 'power3.inOut' }, 0)
 
@@ -224,21 +216,6 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
       overflow: 'hidden',
       fontFamily: "var(--font-oswald), sans-serif",
     }}>
-      {/* SVG 液态扭曲滤镜 */}
-      <svg style={{ display: 'none' }}>
-        <defs>
-          <filter id="liquid-distortion">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves={3} result="noise" />
-            <feDisplacementMap
-              ref={displacementRef}
-              in="SourceGraphic" in2="noise"
-              scale={0}
-              xChannelSelector="R" yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-
       {/* 右上角：LOADING ASSETS */}
       <div ref={loaderStatusRef} style={{
         position: 'absolute', top: '60px', right: '8vw',
@@ -310,7 +287,6 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
                 position: 'absolute',
                 top: '50%', left: '50%',
                 width: '100vw', height: '100vh',
-                filter: isMobile ? 'none' : 'url(#liquid-distortion)',
               }}
             >
               {/* ===== 第一屏真实内容：与 page.tsx section1 完全一致 ===== */}
