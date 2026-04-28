@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鹦鹉杀的"爽缩力"</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper: #e8ebe6;
+  --ink: #141a12;
+  --ink-soft: #2e3a2a;
+  --muted: #7a8a72;
+  --rule: #bdc9b4;
+  --accent: #2d5c3a;
+  --accent-light: #4e8a5e;
+  --cream: #dde4d8;
+  --dark: #111a0e;
+  --dark2: #192016;
+  --fog: #c8d4c2;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.8;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 22px 48px;
+  background: linear-gradient(to bottom, var(--paper) 60%, transparent);
+}
+nav .back {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+nav .back:hover { color: var(--ink); }
+nav .back::before { content: '←'; font-size: 13px; }
+
+/* HERO — magazine cover feel */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 130px 48px 0;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.1s;
+}
+
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+.tag.accent { border-color: var(--accent); color: var(--accent); }
+.tag.neo {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+}
+
+.hero-title-block {
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.2s;
+  margin-bottom: 48px;
+}
+
+.hero-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 6vw, 82px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+
+.hero-subtitle {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: var(--muted);
+  border-left: 2px solid var(--rule);
+  padding-left: 20px;
+  max-width: 600px;
+}
+
+/* INTRO ROW */
+.intro-row {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 56px;
+  align-items: start;
+  margin-bottom: 80px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.35s;
+}
+
+.intro-text .label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 14px;
+}
+
+.intro-text p {
+  font-size: 17px;
+  color: var(--ink-soft);
+  line-height: 1.9;
+}
+
+/* Writing traits card */
+.traits-card {
+  background: var(--dark2);
+  padding: 28px;
+}
+
+.traits-card .card-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.trait-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.trait-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #2a3525;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.trait-item:last-child { border-bottom: none; }
+
+.trait-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+.trait-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #8aaa80;
+  line-height: 1.6;
+}
+
+/* SECTION RULE */
+.section-rule {
+  max-width: 1100px;
+  margin: 0 auto 64px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.section-rule .rule-line { flex: 1; height: 1px; background: var(--rule); }
+.section-rule .rule-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* COINED TERM FEATURE */
+.term-section {
+  background: var(--dark);
+  padding: 72px 48px;
+  margin-bottom: 80px;
+}
+
+.term-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.term-left .term-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.term-word {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 8vw, 100px);
+  font-weight: 900;
+  font-style: italic;
+  color: var(--paper);
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+}
+
+.term-word span { color: var(--accent-light); }
+
+.term-pinyin {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.term-right {}
+
+.term-def {
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: #c8d4c0;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  border-left: 2px solid var(--accent);
+  padding-left: 20px;
+}
+
+.term-context {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ESSAY BODY — the actual text */
+.essay-section {
+  max-width: 780px;
+  margin: 0 auto 80px;
+  padding: 0 48px;
+}
+
+.essay-section .sec-header {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.essay-section .sec-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.essay-section .sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* Individual excerpt blocks */
+.excerpt {
+  margin-bottom: 48px;
+}
+
+.excerpt-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.excerpt-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+.excerpt-body {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px;
+  color: var(--ink);
+  line-height: 1.9;
+  position: relative;
+}
+
+/* Highlight key phrases inline */
+.excerpt-body mark {
+  background: none;
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Pull out a sentence */
+.pull-line {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-style: italic;
+  font-weight: 700;
+  color: var(--ink);
+  border-left: 3px solid var(--accent);
+  padding: 16px 0 16px 24px;
+  margin: 32px 0;
+  line-height: 1.45;
+}
+
+/* Barrage quotes */
+.barrage-block {
+  background: var(--cream);
+  padding: 24px 28px;
+  margin: 32px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.barrage-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.barrage-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.barrage-q {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink-soft);
+  padding-left: 16px;
+  position: relative;
+}
+.barrage-q::before {
+  content: '弹幕';
+  position: absolute;
+  left: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: var(--muted);
+  top: 4px;
+  display: none;
+}
+
+/* OPERATOR NOTE */
+.op-note {
+  max-width: 1100px;
+  margin: 0 auto 80px;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.op-note .op-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.op-note h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+.op-note-right p {
+  font-size: 17px;
+  color: var(--ink-soft);
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+.op-note-right p:last-of-type { margin-bottom: 0; }
+
+.op-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.op-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+/* FOOTER */
+.page-footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 48px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--rule);
+}
+
+.footer-info {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  line-height: 1.9;
+}
+
+.read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 14px 28px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.read-btn:hover { background: var(--accent); }
+
+/* ANIM */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.anim.visible { opacity: 1; transform: none; }
+
+/* RESPONSIVE */
+@media (max-width: 860px) {
+  nav, .hero, .section-rule, .essay-section, .op-note, .page-footer {
+    padding-left: 24px; padding-right: 24px;
+  }
+  .intro-row, .term-inner, .op-note { grid-template-columns: 1fr; gap: 32px; }
+  .term-section { padding: 48px 24px; }
+  .page-footer { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .essay-section { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="back">Article Works</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-meta">
+    <span class="tag accent">Film Review</span>
+    <span class="tag neo">自造词 · 爽缩力</span>
+    <span class="tag">个人影评</span>
+    <span class="tag">情感异化</span>
+  </div>
+
+  <div class="hero-title-block">
+    <div class="hero-eyebrow">Critical Essay · 2024</div>
+    <h1>鹦鹉杀的<br>"<em>爽缩力</em>"</h1>
+    <p class="hero-subtitle">不谈教育，亵渎爱情？</p>
+  </div>
+
+  <div class="intro-row">
+    <div class="intro-text">
+      <div class="label">写作说明 · Writer's Note</div>
+      <p>
+        这篇影评写于《鹦鹉杀》上映后，彼时舆论场将它简单归类为"反诈教育片"或"文艺片"两极。
+        我想绕开这两种标签，从"爽缩力"这个我自己造的词出发，解释为什么观众在结局时
+        产生的不是爽感、而是某种说不清的收缩——那背后是对"弱者姿态"的集体拒斥，
+        也是现代人对真实情感的渴望与恐惧同时存在的矛盾心理。
+      </p>
+    </div>
+
+    <div class="traits-card">
+      <div class="card-label">文字风格特征</div>
+      <div class="trait-list">
+        <div class="trait-item">
+          <div class="trait-dot"></div>
+          <div class="trait-text">自造词汇，概念先行<br>"爽缩力"等新词提炼现象</div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-dot"></div>
+          <div class="trait-text">弹幕即田野，社媒即文本<br>将网络声音纳入分析素材</div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-dot"></div>
+          <div class="trait-text">跨文本联想密度高<br>LaLa Land · 简嫃 · 工具理性</div>
+        </div>
+        <div class="trait-item">
+          <div class="trait-dot"></div>
+          <div class="trait-text">情绪与论点并行推进<br>感性叙述不失分析锐度</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- COINED TERM -->
+<section class="term-section">
+  <div class="term-inner">
+    <div class="term-left">
+      <div class="term-label">自造核心概念 · Coined Term</div>
+      <div class="term-word"><span>爽</span>缩力</div>
+      <div class="term-pinyin">shuǎng suō lì</div>
+    </div>
+    <div class="term-right">
+      <div class="term-def">
+        一种既无法产生爽感、又令观众内心收缩的特殊情绪体验——
+        源于对主角"以身为饵、以爱为营"的认同与拒斥同时发生的矛盾张力。
+      </div>
+      <div class="term-context">
+        道理易懂，高端的猎手往往以猎物的形式出现是剧情片的决胜法宝，
+        观众真正拒绝的是周冉的一次次以身为饵、以爱为营，
+        这背后难以忽视的脆弱与孤注一掷成功产生了"爽缩力"，
+        因为骗子就是骗子，大部分人都不会再赌一次。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-rule anim">
+  <div class="rule-line"></div>
+  <div class="rule-label">原文节选 · Selected Excerpts</div>
+  <div class="rule-line"></div>
+</div>
+
+<!-- ESSAY BODY -->
+<section class="essay-section">
+  <div class="sec-header">
+    <span class="sec-label">Original Writing</span>
+    <span class="sec-title">原文赏析</span>
+  </div>
+
+  <!-- Excerpt 1 -->
+  <div class="excerpt anim">
+    <div class="excerpt-label">开篇定调</div>
+    <div class="excerpt-body">
+      《鹦鹉杀》展现的"tainted love"让观众大呼神经，大雾海岛、六角恐龙与永远见不到的菩萨兼具的文艺片性质让它背负的骂名并不算冤。而作为教育片，部分观众对影片中的杀猪盘顿感失真、早已愤然离席，剩下的还沉浸于与《燃冬》比较回味的一头雾水中，<mark>周冉就已经完成了自己的复仇。</mark>
+    </div>
+  </div>
+
+  <!-- Excerpt 2 -->
+  <div class="excerpt anim">
+    <div class="excerpt-label">情感异化分析</div>
+    <div class="excerpt-body">
+      在"只有骗子才会关心和爱你"的社会中，情感的异化是被捕捉到的矛盾。
+      <div class="barrage-block">
+        <div class="barrage-label">弹幕实录 · 社媒声音作为研究素材</div>
+        <div class="barrage-quotes">
+          <div class="barrage-q">"骗我的感情可以，骗我的钱不行"</div>
+          <div class="barrage-q">"难怪我的男友不做这些"</div>
+        </div>
+      </div>
+      而周冉静默着，<mark>迟钝代替了愤怒，是工具理性时代发出的间或喘息。</mark>借着林致富酒意的冠冕堂皇，导演点出"只要付出爱，就可能被骗"的社会行动箴言。爱是本能，更是武器。
+    </div>
+  </div>
+
+  <!-- Excerpt 3 — pull quote -->
+  <div class="excerpt anim">
+    <div class="excerpt-label">核心论点</div>
+    <div class="excerpt-body">
+      <span class="pull-line">"恐弱"的深层逻辑是"慕强"，这般"厌女"的背后是"厌己"。</span>
+      我们难以接受周冉的自杀式赌博，是对弱者和受伤的生命姿态的真正拒斥。在我看来，周冉兜兜转转，却如简嫃所言，<mark>"光荣地受伤，然后勇敢地痊愈自己"。</mark>
+    </div>
+  </div>
+
+  <!-- Excerpt 4 -->
+  <div class="excerpt anim">
+    <div class="excerpt-label">结尾</div>
+    <div class="excerpt-body">
+      林致富在大雾中渎神，下一秒差点摔下山崖，他唱着明白爱情，却又从来不懂。<mark>因为只有真正的相信，才有真正的爱在这一刻诞生。</mark>
+    </div>
+  </div>
+</section>
+
+<!-- OP NOTE -->
+<section class="op-note anim">
+  <div>
+    <div class="op-label">内容运营视角</div>
+    <h3>用造词能力定义内容边界</h3>
+  </div>
+  <div class="op-note-right">
+    <p>
+      "爽缩力"不是现成词汇，是我从观影体验出发，试图用一个词精确命名一种集体情绪的尝试。
+      这种"造词-定义-论证"的写作方式，在内容运营中对应的是：
+      发现一种尚未被命名的用户情绪，并把它说清楚——这是内容创作中最核心的选题能力之一。
+    </p>
+    <p>
+      把弹幕作为田野材料，把社媒声音纳入文本分析，是我写评论时的一贯习惯。
+      它让文章同时具备学术分析的深度和内容运营所需的受众感知——
+      知道大家在说什么，才能知道大家真正在意什么。
+    </p>
+    <div class="op-tags">
+      <span class="op-tag">新词创造</span>
+      <span class="op-tag">情绪命名能力</span>
+      <span class="op-tag">社媒内容分析</span>
+      <span class="op-tag">受众心理洞察</span>
+      <span class="op-tag">跨文本写作</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="page-footer anim">
+  <div class="footer-info">
+    邓甯予 · 南开大学文艺学硕士<br>
+    研究方向：大众文艺美学（网文、电影方向）<br>
+    个人影评 · 豆瓣 / 自媒体写作
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 70);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.anim').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

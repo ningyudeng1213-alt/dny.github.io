@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets Diary - 观影手帐 App | 产品落地作品集</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css" />
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-deep: #0e0c0a;
+            --bg-card: #151210;
+            --bg-elevated: #1a1714;
+            --gold: #c9a84c;
+            --gold-light: #e8d49a;
+            --gold-dim: #8a7235;
+            --text-primary: #f0ece4;
+            --text-secondary: #a09a8f;
+            --text-dim: #5a564f;
+        }
+
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+
+        body {
+            font-family: "LXGW WenKai Lite", sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Film grain */
+        body::before {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.06; pointer-events: none; z-index: 9999;
+        }
+        /* Vignette */
+        body::after {
+            content: '';
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(8,6,4,0.55) 100%);
+            pointer-events: none; z-index: 9998;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        .section-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 0.8rem;
+        }
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700; line-height: 1.3; margin-bottom: 1.5rem;
+        }
+        .section-desc {
+            color: var(--text-secondary); font-size: 1rem;
+            line-height: 1.9; max-width: 640px; text-align: justify;
+        }
+        .divider {
+            width: 60px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+            margin: 0 auto 2rem;
+        }
+
+        /* ===== LETTERBOX ===== */
+        .letterbox-top, .letterbox-bottom {
+            position: fixed; left: 0; width: 100%; height: 28px;
+            background: linear-gradient(90deg, #050403, #080604, #050403);
+            z-index: 1000; pointer-events: none;
+        }
+        .letterbox-top { top: 0; border-bottom: 1px solid rgba(201,168,76,0.08); }
+        .letterbox-bottom { bottom: 0; border-top: 1px solid rgba(201,168,76,0.08); }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed; top: 28px; width: 100%; z-index: 900;
+            padding: 1.2rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(180deg, rgba(14,12,10,0.97) 0%, rgba(14,12,10,0) 100%);
+        }
+        nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem; letter-spacing: 0.15em; color: var(--gold); font-weight: 400;
+        }
+        nav .nav-links { display: flex; gap: 2rem; list-style: none; }
+        nav .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.8rem; letter-spacing: 0.12em; transition: color 0.3s;
+        }
+        nav .nav-links a:hover { color: var(--gold-light); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            position: relative; padding: 120px 2rem 80px; overflow: hidden;
+            background:
+                radial-gradient(ellipse 900px 700px at 75% 20%, rgba(120,80,30,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 600px 600px at 20% 80%, rgba(80,40,20,0.05) 0%, transparent 70%),
+                var(--bg-deep);
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 200px;
+            background: linear-gradient(0deg, var(--bg-card) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        .hero-inner {
+            max-width: 1200px; margin: 0 auto; width: 100%;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+        }
+        .hero-text { position: relative; z-index: 2; }
+        .hero-tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.7rem; letter-spacing: 0.5em; text-transform: uppercase;
+            color: var(--gold-dim); margin-bottom: 2rem;
+            opacity: 0; animation: fadeUp 1s 0.3s forwards;
+        }
+        .hero-title {
+            margin-bottom: 2rem; max-width: 520px;
+            opacity: 0; animation: fadeUp 1s 0.5s forwards;
+        }
+        .hero-title-en {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 4.2rem);
+            font-weight: 900; font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+        .hero-title-cn {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(1.3rem, 2.8vw, 1.85rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1.5;
+            letter-spacing: 0.06em;
+        }
+        .hero-desc {
+            color: var(--text-secondary); font-size: 1.05rem; line-height: 2;
+            margin-bottom: 2.5rem; max-width: 500px;
+            opacity: 0; animation: fadeUp 1s 0.7s forwards;
+        }
+        .hero-actions {
+            display: flex; gap: 1rem;
+            opacity: 0; animation: fadeUp 1s 0.9s forwards;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: linear-gradient(135deg, var(--gold) 0%, #b8953e 100%);
+            color: var(--bg-deep); font-weight: 700; font-size: 0.9rem;
+            border: none; border-radius: 0; cursor: pointer;
+            text-decoration: none; letter-spacing: 0.05em;
+            transition: all 0.3s;
+            box-shadow: 0 2px 12px rgba(201,168,76,0.15);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+        }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.9rem 2rem; background: transparent;
+            color: var(--gold); font-weight: 700; font-size: 0.9rem;
+            border: 1px solid var(--gold-dim); border-radius: 0; cursor: pointer;
+            text-decoration: none; letter-spacing: 0.05em; transition: all 0.3s;
+        }
+        .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
+        /* ===== PHONE ===== */
+        .phone-wrap { display: flex; justify-content: center; align-items: center; position: relative; z-index: 2; }
+        .phone {
+            width: 270px; height: 580px; border-radius: 2.2rem;
+            border: 1.5px solid rgba(201,168,76,0.15);
+            overflow: hidden; position: relative; background: #1a1714;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.02),
+                0 4px 16px rgba(0,0,0,0.4),
+                0 30px 80px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.03),
+                0 0 100px rgba(120,80,30,0.04);
+            transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.5s;
+        }
+        .phone:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.04),
+                0 8px 24px rgba(0,0,0,0.5),
+                0 40px 100px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(255,255,255,0.04),
+                0 0 140px rgba(201,168,76,0.06);
+        }
+        .phone img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+        .phone .badge {
+            position: absolute; top: 16px; right: 16px;
+            background: linear-gradient(135deg, rgba(201,168,76,0.92), rgba(180,148,56,0.92));
+            color: var(--bg-deep); padding: 4px 10px; font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.1em; z-index: 20; text-transform: uppercase;
+        }
+
+        /* ===== SECTION ===== */
+        .section { padding: 100px 2rem; position: relative; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+
+        .feature-grid { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+        .glow-wrapper { position: relative; }
+        .glow-wrapper::before {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(120,80,30,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .section--dark {
+            background: radial-gradient(ellipse 800px 500px at 30% 50%, rgba(90,60,20,0.04) 0%, transparent 70%), var(--bg-deep);
+        }
+        .section--card {
+            background:
+                radial-gradient(ellipse 700px 500px at 70% 40%, rgba(100,70,25,0.05) 0%, transparent 70%),
+                radial-gradient(ellipse 400px 400px at 10% 80%, rgba(80,50,20,0.03) 0%, transparent 70%),
+                var(--bg-card);
+            box-shadow: inset 0 1px 0 rgba(201,168,76,0.04), inset 0 -1px 0 rgba(201,168,76,0.04);
+        }
+        .section--elevated {
+            background: radial-gradient(ellipse 600px 400px at 50% 30%, rgba(110,75,30,0.05) 0%, transparent 70%), var(--bg-elevated);
+        }
+
+        /* ===== PHASE SYSTEM ===== */
+        .phase-badge {
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 1rem;
+        }
+        .phase-badge .phase-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px;
+            border: 1px solid var(--gold-dim);
+            font-family: 'Playfair Display', serif;
+            font-size: 0.8rem; font-weight: 700; color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        /* Phase two-column layout */
+        .phase-layout {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; align-items: center;
+        }
+        .phase-layout--reverse { direction: rtl; }
+        .phase-layout--reverse > * { direction: ltr; }
+
+        .phase-text { position: relative; z-index: 2; }
+        .phase-text h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem; font-weight: 700;
+            color: var(--gold-light);
+            margin: 2rem 0 0.6rem;
+        }
+        .phase-text h3:first-of-type { margin-top: 0; }
+        .phase-text p {
+            color: var(--text-secondary);
+            font-size: 0.95rem; line-height: 2; text-align: justify;
+        }
+        .phase-highlight {
+            margin-top: 1.5rem; padding: 1.2rem 1.5rem;
+            border-left: 2px solid var(--gold-dim);
+            background: rgba(201,168,76,0.03);
+            color: var(--text-secondary);
+            font-size: 0.9rem; line-height: 1.9; font-style: italic;
+        }
+
+        .phase-visual {
+            display: flex; justify-content: center; align-items: center;
+            gap: 2rem; flex-wrap: wrap; position: relative;
+        }
+
+        /* Timeline connector */
+        .timeline-connector {
+            display: flex; justify-content: center; padding: 0;
+            position: relative; height: 80px;
+        }
+        .timeline-connector::before {
+            content: ''; width: 1px; height: 100%;
+            background: linear-gradient(180deg, var(--gold-dim) 0%, rgba(138,114,53,0.2) 100%);
+        }
+
+        /* ===== ABOUT ===== */
+        .about-card {
+            max-width: 640px; margin: 0 auto;
+            border: 1px solid rgba(201,168,76,0.1); padding: 3rem;
+            background:
+                radial-gradient(ellipse 400px 300px at 20% 80%, rgba(100,70,25,0.05) 0%, transparent 70%),
+                var(--bg-card);
+            box-shadow: 0 4px 40px rgba(0,0,0,0.2), inset 0 1px 0 rgba(201,168,76,0.05);
+        }
+        .about-card h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem; font-weight: 700;
+            margin-bottom: 1.5rem; color: var(--text-primary);
+        }
+        .about-card p { color: var(--text-secondary); line-height: 2; margin-bottom: 1rem; text-align: justify; }
+        .about-contact {
+            display: flex; flex-direction: column; gap: 0.5rem;
+            margin: 2rem 0; color: var(--text-dim); font-size: 0.9rem;
+        }
+        .about-contact span { display: flex; align-items: center; gap: 0.6rem; }
+        .about-contact svg { width: 16px; height: 16px; stroke: var(--gold-dim); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center; padding: 3rem 2rem 4rem;
+            color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.15em;
+            border-top: 1px solid rgba(201,168,76,0.06);
+        }
+        footer .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem; color: var(--gold-dim); letter-spacing: 0.25em; margin-bottom: 0.8rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+        .reveal-delay-3 { transition-delay: 0.45s; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hr-deco {
+            display: flex; align-items: center; gap: 1rem;
+            justify-content: center; margin: 0 auto; padding: 0 2rem; max-width: 300px;
+        }
+        .hr-deco::before, .hr-deco::after {
+            content: ''; flex: 1; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+        }
+        .hr-deco span {
+            color: var(--gold-dim); font-size: 0.7rem; letter-spacing: 0.3em;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .letterbox-top, .letterbox-bottom { height: 18px; }
+            nav { top: 18px; padding: 1rem; }
+            nav .nav-links { display: none; }
+            .hero { padding: 100px 1.2rem 60px; }
+            .hero-inner { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+            .hero-desc { margin-left: auto; margin-right: auto; }
+            .hero-actions { justify-content: center; flex-wrap: wrap; }
+            .hero-title { margin-left: auto; margin-right: auto; text-align: center; }
+            .section { padding: 60px 1.2rem; }
+            .section-header { margin-bottom: 2.5rem; }
+            .feature-grid { gap: 2rem; }
+            .phone { width: 240px; height: 510px; }
+            .about-card { padding: 1.5rem; }
+            .btn-primary, .btn-outline { padding: 0.8rem 1.5rem; font-size: 0.85rem; }
+            .phase-layout, .phase-layout--reverse { grid-template-columns: 1fr; gap: 2.5rem; direction: ltr; }
+            .phase-visual { order: -1; }
+            .timeline-connector { height: 50px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="letterbox-top"></div>
+<div class="letterbox-bottom"></div>
+
+<nav>
+    <div class="logo">TICKETS DIARY</div>
+    <ul class="nav-links">
+        <li><a href="#phase1">Process</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-text">
+            <p class="hero-tagline">A Film Ticket Journal App</p>
+            <div class="hero-title">
+                <div class="hero-title-en">Tickets Diary:</div>
+                <div class="hero-title-cn">数字时代的私人观影手帐</div>
+            </div>
+            <p class="hero-desc">
+                纸会褪色，但那场电影带给你的感受不会。<br><br>
+                电影日记：以下将完整呈现从一个模糊的个人痛点出发，经过需求分析、产品规划、交互设计、开发测试到最终成品的全过程。
+            </p>
+            <div class="hero-actions">
+                <a href="#about" class="btn-primary">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    查看简历
+                </a>
+                <a href="#phase1" class="btn-outline">探索产品过程 →</a>
+            </div>
+        </div>
+        <div class="phone-wrap">
+            <div class="phone" style="width: 290px; height: 620px;">
+                <div class="badge">▶ DEMO</div>
+                <img src="pic1_home.webp" alt="App首页动图" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ========== PHASE 01: 需求分析 ========== -->
+<section id="phase1" class="section section--card">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <div class="phase-badge"><span class="phase-num">1</span> Demand Analysis</div>
+            <div class="divider"></div>
+            <h2 class="section-title">需求分析</h2>
+        </div>
+        <div class="phase-layout reveal">
+            <div class="phase-text">
+                <h3>个人痛点</h3>
+                <p>作为一个常年收集电影票根的人，纸质票根容易褪色、遗失的问题一直困扰着我。每张票根背后都是一段具体的记忆——和谁去的、那天的心情、散场后聊了什么——但这些细节正在随着纸质票根的褪色一起消失。</p>
+
+                <h3>市场现状</h3>
+                <p>市面上的观影记录工具（豆瓣、Letterboxd 等）大多围绕电影本身展开，核心功能是评分和影评。它们记录的是"看了什么电影"，而非"那次看电影的经历"。没有一款产品真正在意票根本身——这张承载了时间、地点、同行人的实体凭证。</p>
+
+                <h3>目标用户</h3>
+                <p>有票根收集习惯的观影爱好者，尤其是习惯用手帐、日记等方式记录生活的年轻女性用户。她们需要的不是又一个影评工具，而是一个能保留每一次观影经历的私人手帐。</p>
+
+                <div class="phase-highlight">
+                    核心洞察：部分用户的真实需求不是记录对于电影的专业看法，而是在爆米花和奶茶的轻松氛围中保存看电影这件事的完整记忆，而票根是触发记忆的钥匙。
+                </div>
+            </div>
+            <div class="phase-visual">
+                <div class="phone" style="width: 260px; height: 555px;">
+                    <div class="badge">▶ DEMO</div>
+                    <img src="pic1_home.webp" alt="App首页" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="timeline-connector"></div>
+
+<!-- ========== PHASE 02: 产品规划 ========== -->
+<section id="phase2" class="section section--dark">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <div class="phase-badge"><span class="phase-num">2</span> Product Planning</div>
+            <div class="divider"></div>
+            <h2 class="section-title">产品规划</h2>
+        </div>
+        <div class="phase-layout phase-layout--reverse reveal">
+            <div class="phase-text">
+                <h3>核心功能定义</h3>
+                <p>基于需求分析，将产品功能拆解为四个模块，按优先级排列：票根数字化（OCR 识别 + 电子模板）、个性化记录（同行人 / 小食 / 情绪标签）、数据统计（观影回顾 / 搭子报告）、社交分享（长图模板 / 票根墙导出）。</p>
+
+                <h3>MVP 范围界定</h3>
+                <p>两周开发周期，使用 Cursor + AI 辅助开发。MVP 聚焦前两个模块——先让"拍照 → 识别 → 生成电子票根 → 补充私人记忆"这条最小闭环跑通，再迭代统计和分享功能。</p>
+
+                <h3>差异化策略</h3>
+                <p>不做影评、不做社区、不做推荐算法。只做一件事：让每张票根变成一页完整的观影手帐。所有功能围绕"票根"这个核心对象展开，而非围绕"电影"。</p>
+
+                <div class="phase-highlight">
+                    决策逻辑：砍掉影评和社区板块，这些功能会让产品变成第二个豆瓣，只有舍弃一部分同质化特点才能保留核心竞争力。
+                </div>
+            </div>
+            <div class="phase-visual">
+                <div class="phone" style="width: 260px; height: 555px;">
+                    <div class="badge">▶ GIF</div>
+                    <img src="pic2_wall.webp" alt="票根墙" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="timeline-connector"></div>
+
+<!-- ========== PHASE 03: 产品设计 ========== -->
+<section id="phase3" class="section section--card">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <div class="phase-badge"><span class="phase-num">3</span> Product Design</div>
+            <div class="divider"></div>
+            <h2 class="section-title">产品设计</h2>
+        </div>
+        <div class="phase-layout reveal">
+            <div class="phase-text">
+                <h3>一次关键的设计转向</h3>
+                <p>项目初心是"保留纸质票根的原始面貌"。但实际设计中发现，各影院票根的尺寸和版式差异很大，直接以原图展示会导致票根墙视觉混乱，因此转向设计标准化的电子票根模板。</p>
+                <p>然而这一转向几乎背离了初心——纸质票根的真实面貌反而无处安放了。</p>
+
+                <h3>解决方案</h3>
+                <p>最终方案是在 OCR 流程中加入四角精准拖动裁剪功能：用户拍摄实体票根后，可以手动裁剪出想保留的区域，裁剪结果作为票根墙封面图呈现。这样既保证了票根墙的视觉统一性，又保留了每张纸质票根的真实样貌。</p>
+
+                <h3>模板与个性化系统</h3>
+                <p>设计了三套电子票根模板，统一格式但提供不同配色风格。票面信息由 OCR 自动填入，用户也可以手动修改。模板之外，额外提供同行人、小食、情绪三个个性化记录维度。</p>
+
+                <div class="phase-highlight">
+                    设计原则：标准化与个性化并非对立。模板解决视觉一致性，裁剪封面增加回忆的真实性，个性化字段则保留记忆的完整性。
+                </div>
+            </div>
+            <div class="phase-visual">
+                <div class="phone" style="width: 250px; height: 535px;">
+                    <div class="badge">▶ GIF</div>
+                    <img src="pic3_ticket.webp" alt="模板切换" onerror="this.style.display='none'">
+                </div>
+                <div class="phone" style="width: 250px; height: 535px;">
+                    <img src="pic5_journal.webp" alt="情绪手帐" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="timeline-connector"></div>
+
+<!-- ========== PHASE 04: 开发 / 测试 ========== -->
+<section id="phase4" class="section section--dark">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <div class="phase-badge"><span class="phase-num">4</span> Development &amp; Testing</div>
+            <div class="divider"></div>
+            <h2 class="section-title">开发 / 测试</h2>
+        </div>
+        <div class="phase-layout phase-layout--reverse reveal">
+            <div class="phase-text">
+                <h3>Vibe Coding 实践</h3>
+                <p>使用 Cursor和Xcode完成全部开发。整个过程的核心不是写代码，而是将产品需求拆解为 AI 能理解的指令——每个功能的预期效果、交互流程、边界情况，都需要用清晰的自然语言定义。</p>
+
+                <h3>最大的卡点：OCR 调试</h3>
+                <p>OCR 功能的调试耗时近两天。主要问题是上传新图片后应用闪退，经过与 Cursor 多轮沟通和 prompt 调整才定位到是内存管理的问题。但 OCR 是产品的基础能力，识别精度直接影响用户的使用意愿和使用频率，因此必须要解决。</p>
+
+                <h3>关键学习</h3>
+                <p>AI 辅助开发的瓶颈在于能不能把需求描述得足够清楚，模糊的指令只会产出模糊的代码。只有输出越清晰的需求定义，才能收获越高效的执行。</p>
+
+                <div class="phase-highlight">
+                    在 AI 时代，我意识到能否写代码不再是决定性壁垒，更重要的是能否定义清楚执行目标以及讲好故事。
+                </div>
+            </div>
+            <div class="phase-visual">
+                <div class="phone" style="width: 260px; height: 555px;">
+                    <img src="pic4_ocr.webp" alt="OCR识别" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="timeline-connector"></div>
+
+<!-- ========== PHASE 05: 最终成品 ========== -->
+<section id="phase5" class="section section--elevated">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <div class="phase-badge"><span class="phase-num">5</span> Launch &amp; Delivery</div>
+            <div class="divider"></div>
+            <h2 class="section-title">最终成品</h2>
+        </div>
+        <div class="reveal" style="text-align: center; margin-bottom: 3rem;">
+            <p class="section-desc" style="margin: 0 auto;">
+                两周时间，从一个模糊的想法到 Xcode 模拟器中可运行的完整产品。覆盖票根 OCR 识别、个性化观影记录、观影数据统计、搭子报告与社交分享长图生成的完整功能链路。
+            </p>
+        </div>
+        <div class="feature-grid glow-wrapper">
+            <div class="phone reveal reveal-delay-1">
+                <img src="pic6_stats.webp" alt="观影回顾" onerror="this.style.display='none'">
+            </div>
+            <div class="phone reveal reveal-delay-2">
+                <img src="pic7_companion.webp" alt="观影搭子" onerror="this.style.display='none'">
+            </div>
+            <div class="phone reveal reveal-delay-3" style="height: auto; min-height: 580px;">
+                <img src="pic8_share.webp" alt="长图分享" onerror="this.style.display='none'" style="border-radius: 2rem;">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ==================== ABOUT ==================== -->
+<div class="hr-deco"><span>✦</span></div>
+
+<section id="about" class="section section--dark">
+    <div class="section-inner">
+        <div class="section-header reveal">
+            <div class="section-label">About the Creator</div>
+            <div class="divider"></div>
+            <h2 class="section-title">关于开发者</h2>
+        </div>
+        <div class="about-card reveal">
+            <h3>邓甯予</h3>
+            <p>南开大学文艺学专业应届毕业生，研究方向为大众文艺美学。长期关注网文与电影的传播逻辑——什么样的内容能被广泛接受、背后的结构性原因是什么。这种分析习惯也延伸到了产品设计中：Tickets Diary 的功能取舍和用户定位，很大程度上来自对观影人群的分层观察。</p>
+            <p>这是首次尝试用 AI 工具将想法落地为可运行的产品，我享受从模糊的需求中提炼出清晰定义的过程，也相信人文学科训练出来的对语言的敏感、对人的理解、对细节的关注，在产品设计中同样有其价值。</p>
+            <p>目前正在寻找产品、运营和内容方向的工作机会，也对 AI 应用领域保持开放。如果你觉得这个项目的思考方式有意思，欢迎联系我。</p>
+
+            <div class="about-contact">
+                <span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    dny2026@126.com
+                </span>
+                <span>
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/></svg>
+                    微信：Anyd_1213
+                </span>
+            </div>
+
+            <a href="resume.pdf" target="_blank" class="btn-primary" style="width: 100%; justify-content: center;">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                一键下载邓甯予的简历（PDF）
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-logo">TICKETS DIARY</div>
+    <p>Designed & Built with Cursor + AI &nbsp;·&nbsp; 2025</p>
+</footer>
+
+<script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

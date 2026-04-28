@@ -2,13 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',
-  basePath: '/dny.github.io',
-  assetPrefix: '/dny.github.io',
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },
   env: {
-    NEXT_PUBLIC_BASE_PATH: '/dny.github.io',
+    NEXT_PUBLIC_BASE_PATH: '',
   },
 };
 

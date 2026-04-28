@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本命手串 · 个人兴趣项目复盘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#ddd6e8;
+  --bg-soft:#cec5dd;
+  --card:#f4f0fa;
+  --line:rgba(105,87,146,0.26);
+  --line-strong:rgba(105,87,146,0.48);
+  --gold:#6f5a9d;
+  --gold-2:#9078c0;
+  --text:#1f1a2d;
+  --text-dim:#463d5f;
+  --text-mute:#6d6288;
+  --ok:#6f5a9d;
+  --warn:#856db1;
+  --danger:#9a78ba;
+  --max:1180px;
+  --radius:18px;
+  --serif:"Noto Serif SC","Songti SC",serif;
+  --display:"Cormorant Garamond",serif;
+  --sans:"Manrope","PingFang SC",-apple-system,sans-serif;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background:radial-gradient(circle at 16% -10%, rgba(138,116,184,0.32), transparent 44%),
+             radial-gradient(circle at 118% 34%, rgba(175,156,214,0.36), transparent 54%),
+             radial-gradient(circle at 24% 118%, rgba(154,136,193,0.22), transparent 52%),
+             linear-gradient(180deg, #e6e0ef 0%, #d8d0e4 100%),
+             var(--bg);
+  color:var(--text);
+  font-family:var(--serif);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23f)' opacity='0.38'/></svg>");
+  opacity:.03;
+  mix-blend-mode:multiply;
+  z-index:20;
+}
+::selection { background:var(--gold); color:#1f1534; }
+
+.topbar {
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:30;
+  padding:16px 34px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:linear-gradient(to bottom, rgba(246,242,252,0.96), rgba(246,242,252,0.84) 72%, transparent);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid rgba(105,87,146,0.2);
+  box-shadow:0 8px 24px rgba(56,42,86,0.06);
+}
+.brand {
+  font-family:var(--display);
+  font-size:24px;
+  letter-spacing:.04em;
+  color:var(--gold-2);
+  font-style:italic;
+}
+.top-meta {
+  display:flex;
+  gap:20px;
+  font-family:var(--sans);
+  font-size:11px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--text-mute);
+}
+.top-meta span::before {
+  content:"/";
+  margin-right:8px;
+  color:rgba(105,87,146,0.5);
+}
+@media (max-width:900px) {
+  .topbar { padding:14px 18px; }
+  .top-meta { display:none; }
+}
+
+.toc {
+  position:fixed;
+  right:24px;
+  top:112px;
+  z-index:26;
+  width:140px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(243,239,250,0.4);
+  backdrop-filter:blur(5px);
+  padding:14px;
+  box-shadow:0 10px 22px rgba(61,47,93,0.08);
+}
+.toc h4 {
+  font-family:var(--sans);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--text-mute);
+  margin-bottom:10px;
+}
+.toc a {
+  display:block;
+  color:var(--text-dim);
+  text-decoration:none;
+  font-size:12px;
+  margin:8px 0;
+  transition:color .25s ease, transform .25s ease;
+}
+.toc a.active,
+.toc a:hover { color:var(--gold-2); transform:translateX(3px); }
+@media (max-width:1280px) {
+  .toc { display:none; }
+}
+
+.container,
+.narrow {
+  width:min(var(--max), calc(100% - 56px));
+  margin:0 auto;
+  position:relative;
+}
+.narrow { width:min(900px, calc(100% - 56px)); }
+@media (max-width:760px) {
+  .container,
+  .narrow { width:calc(100% - 34px); }
+}
+
+section { padding:110px 0; position:relative; }
+@media (max-width:760px) {
+  section { padding:78px 0; }
+}
+
+.hero {
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:130px 0 72px;
+  position:relative;
+  overflow:hidden;
+}
+.hero .container {
+  position:relative;
+  z-index:2;
+}
+.hero-orbit {
+  position:absolute;
+  top:50%;
+  right:-120px;
+  transform:translateY(-50%);
+  width:680px;
+  height:680px;
+  z-index:1;
+  opacity:.52;
+  pointer-events:none;
+}
+.hero-orbit svg {
+  width:100%;
+  height:100%;
+  animation:orbitSpin 180s linear infinite;
+}
+@keyframes orbitSpin {
+  to { transform:rotate(360deg); }
+}
+@media (max-width:1100px) {
+  .hero-orbit { width:470px; height:470px; right:-200px; opacity:.34; }
+}
+@media (max-width:760px) {
+  .hero { min-height:auto; }
+  .hero-orbit { width:320px; height:320px; right:-170px; opacity:.22; }
+}
+
+.eyebrow {
+  font-family:var(--display);
+  font-style:italic;
+  color:var(--gold);
+  font-size:18px;
+  letter-spacing:.1em;
+  margin-bottom:20px;
+}
+.h1 {
+  font-size:clamp(40px, 7.2vw, 90px);
+  line-height:.92;
+  letter-spacing:-.02em;
+  font-weight:700;
+  margin-bottom:20px;
+}
+.h1 .en {
+  display:block;
+  font-size:clamp(22px, 3vw, 34px);
+  line-height:1.1;
+  color:var(--gold-2);
+  font-family:var(--display);
+  font-style:italic;
+  font-weight:500;
+  letter-spacing:.02em;
+  margin-top:18px;
+}
+.hero-lead {
+  max-width:780px;
+  font-size:18px;
+  color:var(--text-dim);
+  margin-bottom:36px;
+}
+.hero-lead strong { color:var(--text); }
+
+.hero-site {
+  display:inline-flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px 14px;
+  max-width:980px;
+  margin-bottom:30px;
+  padding:14px 18px;
+  border:1px solid rgba(105,87,146,0.26);
+  border-radius:18px;
+  background:linear-gradient(145deg, rgba(145,124,190,0.18), rgba(249,246,255,0.9));
+  box-shadow:0 10px 24px rgba(60,44,92,0.08);
+}
+.hero-site-label,
+.hero-site-note {
+  font-family:var(--sans);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--text-mute);
+}
+.hero-site-link {
+  color:var(--gold);
+  text-decoration:none;
+  font-family:var(--sans);
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.02em;
+  word-break:break-all;
+  transition:color .25s ease, transform .25s ease;
+}
+.hero-site-link:hover {
+  color:var(--gold-2);
+  transform:translateY(-1px);
+}
+@media (max-width:760px) {
+  .hero-site {
+    display:flex;
+    align-items:flex-start;
+    padding:14px 16px;
+  }
+}
+
+.hero-focus {
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  background:linear-gradient(145deg, rgba(145,124,190,0.2), rgba(246,242,252,0.92));
+  max-width:980px;
+  box-shadow:0 12px 28px rgba(60,44,92,0.08);
+}
+.hero-focus-title {
+  font-family:var(--sans);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--text-mute);
+  margin-bottom:12px;
+}
+.hero-focus-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.hero-focus-item {
+  border:1px solid rgba(105,87,146,0.24);
+  border-radius:12px;
+  padding:14px;
+  background:rgba(249,246,255,0.82);
+}
+.hero-focus-item .k {
+  font-family:var(--display);
+  font-style:italic;
+  font-size:20px;
+  color:var(--gold-2);
+  margin-bottom:4px;
+}
+.hero-focus-item p {
+  font-size:14px;
+  color:var(--text-dim);
+  line-height:1.6;
+}
+@media (max-width:980px) {
+  .hero-focus-grid { grid-template-columns:1fr; }
+}
+
+.section-head {
+  margin-bottom:28px;
+}
+.section-head .mark {
+  font-family:var(--sans);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--gold);
+  margin-bottom:10px;
+}
+.section-head h2 {
+  font-size:clamp(30px, 4.4vw, 54px);
+  line-height:1.12;
+  letter-spacing:-.01em;
+  margin-bottom:10px;
+}
+.section-head p {
+  font-size:16px;
+  color:var(--text-dim);
+  max-width:760px;
+}
+
+.card-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.card {
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(180deg, rgba(145,124,190,0.14), rgba(246,242,252,0.9));
+  padding:22px;
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.card h3 {
+  font-size:18px;
+  margin-bottom:10px;
+}
+.card p {
+  font-size:14px;
+  color:var(--text-dim);
+}
+@media (max-width:980px) {
+  .card-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:640px) {
+  .card-grid { grid-template-columns:1fr; }
+}
+
+.snapshot {
+  border:1px solid var(--line-strong);
+  border-radius:20px;
+  padding:26px;
+  background:linear-gradient(140deg, rgba(145,124,190,0.14), rgba(246,242,252,0.93));
+  box-shadow:0 12px 28px rgba(61,47,93,0.08);
+}
+.snapshot-grid {
+  margin-top:16px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.snapshot-item {
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  background:rgba(248,245,255,0.9);
+}
+.snapshot-item .k {
+  font-family:var(--sans);
+  text-transform:uppercase;
+  font-size:10px;
+  letter-spacing:.16em;
+  color:var(--text-mute);
+}
+.snapshot-item .v {
+  font-size:16px;
+  color:var(--text);
+  margin-top:8px;
+  line-height:1.4;
+}
+.snapshot-item .sub {
+  margin-top:6px;
+  font-size:12px;
+  color:var(--text-mute);
+}
+@media (max-width:1000px) {
+  .snapshot-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:560px) {
+  .snapshot-grid { grid-template-columns:1fr; }
+}
+
+.table {
+  margin-top:22px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.row {
+  display:grid;
+  grid-template-columns:120px 1.1fr 1fr;
+  gap:20px;
+  padding:18px 22px;
+  border-bottom:1px solid var(--line);
+  background:rgba(244,239,252,0.92);
+}
+.row:nth-child(odd) {
+  background:rgba(235,228,246,0.94);
+}
+.row:last-child { border-bottom:none; }
+.row .level {
+  font-family:var(--sans);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:600;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid currentColor;
+  width:fit-content;
+}
+.level.p0 { color:var(--danger); background:rgba(154,120,186,0.12); }
+.level.p1 { color:var(--warn); background:rgba(133,109,177,0.12); }
+.row .title { color:var(--text); font-size:16px; }
+.row .impact { color:var(--text-dim); font-size:14px; }
+@media (max-width:840px) {
+  .row { grid-template-columns:1fr; gap:8px; }
+}
+
+.goal-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+}
+.goal-card {
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  background:rgba(244,239,252,0.92);
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.goal-card .tag {
+  font-family:var(--display);
+  font-style:italic;
+  color:var(--gold);
+  font-size:18px;
+  margin-bottom:8px;
+}
+.goal-card ul {
+  list-style:none;
+  display:grid;
+  gap:8px;
+}
+.goal-card li {
+  font-size:14px;
+  color:var(--text-dim);
+  padding-left:16px;
+  position:relative;
+}
+.goal-card li::before {
+  content:"•";
+  position:absolute;
+  left:0;
+  top:0;
+  color:var(--gold);
+}
+@media (max-width:980px) {
+  .goal-grid { grid-template-columns:1fr; }
+}
+
+.research-wrap {
+  display:grid;
+  grid-template-columns:1.05fr 1fr;
+  gap:16px;
+}
+@media (max-width:940px) {
+  .research-wrap { grid-template-columns:1fr; }
+}
+.panel {
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  background:rgba(244,239,252,0.92);
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.panel h3 {
+  font-size:20px;
+  margin-bottom:12px;
+}
+.panel p,
+.panel li { font-size:14px; color:var(--text-dim); }
+.panel ul {
+  list-style:none;
+  display:grid;
+  gap:8px;
+}
+.panel li {
+  position:relative;
+  padding-left:16px;
+}
+.panel li::before {
+  content:"-";
+  position:absolute;
+  left:0;
+  color:var(--gold);
+}
+.quote-list {
+  display:grid;
+  gap:10px;
+}
+.quote {
+  border:1px solid rgba(105,87,146,0.23);
+  border-radius:12px;
+  padding:14px;
+  background:rgba(248,245,255,0.9);
+}
+.quote .who {
+  font-size:12px;
+  color:var(--text-mute);
+  margin-bottom:6px;
+}
+.quote .say {
+  font-size:14px;
+  color:var(--text);
+  line-height:1.6;
+}
+
+.matrix {
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+}
+.matrix-row {
+  display:grid;
+  grid-template-columns:1.1fr 1fr 1fr 1fr;
+  gap:14px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  background:rgba(244,239,252,0.92);
+}
+.matrix-row.head {
+  background:rgba(145,124,190,0.18);
+  font-family:var(--sans);
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:10px;
+  color:var(--text-mute);
+}
+.matrix-row:last-child { border-bottom:none; }
+.matrix-row div { font-size:14px; color:var(--text-dim); }
+.matrix-row .strong { color:var(--text); }
+@media (max-width:980px) {
+  .matrix-row { grid-template-columns:1fr; }
+}
+
+.workstreams {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media (max-width:980px) {
+  .workstreams { grid-template-columns:1fr; }
+}
+.stream {
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  background:linear-gradient(180deg, rgba(145,124,190,0.14), rgba(246,242,252,0.93));
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.stream h3 {
+  font-size:19px;
+  margin-bottom:10px;
+}
+.badge {
+  display:inline-block;
+  border:1px solid rgba(105,87,146,0.42);
+  color:var(--ok);
+  border-radius:999px;
+  padding:3px 10px;
+  font-family:var(--sans);
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+.stream .line {
+  font-size:14px;
+  color:var(--text-dim);
+  margin-bottom:8px;
+}
+.stream .line strong {
+  color:var(--text);
+}
+
+.before-after {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+@media (max-width:860px) {
+  .before-after { grid-template-columns:1fr; }
+}
+.compare {
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  background:rgba(244,239,252,0.92);
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.compare h3 {
+  font-size:22px;
+  margin-bottom:10px;
+}
+.compare ul { list-style:none; display:grid; gap:8px; }
+.compare li {
+  font-size:14px;
+  color:var(--text-dim);
+  padding-left:16px;
+  position:relative;
+}
+.compare li::before {
+  content:"+";
+  position:absolute;
+  left:0;
+  color:var(--gold);
+}
+
+.metric-board {
+  margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.metric {
+  border:1px dashed rgba(105,87,146,0.34);
+  border-radius:12px;
+  padding:14px;
+  background:rgba(248,245,255,0.9);
+}
+.metric .n {
+  font-size:20px;
+  color:var(--gold-2);
+  font-family:var(--serif);
+  line-height:1.35;
+}
+.metric .d {
+  font-size:12px;
+  color:var(--text-mute);
+  margin-top:4px;
+}
+@media (max-width:980px) {
+  .metric-board { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:560px) {
+  .metric-board { grid-template-columns:1fr; }
+}
+
+.timeline {
+  margin-top:12px;
+  border-left:1px solid var(--line-strong);
+  padding-left:22px;
+  display:grid;
+  gap:16px;
+}
+.t-item {
+  position:relative;
+  padding:6px 0 6px 6px;
+}
+.t-item::before {
+  content:"";
+  position:absolute;
+  left:-28px;
+  top:12px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--bg);
+  border:1px solid var(--gold);
+}
+.t-item strong {
+  color:var(--text);
+  font-size:16px;
+}
+.t-item p {
+  color:var(--text-dim);
+  font-size:14px;
+  margin-top:4px;
+}
+
+.asset-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+.asset--home {
+  grid-column:span 2;
+}
+@media (max-width:980px) {
+  .asset-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+  .asset--home {
+    grid-column:span 2;
+  }
+}
+@media (max-width:680px) {
+  .asset-grid { grid-template-columns:1fr; }
+  .asset--home {
+    grid-column:span 1;
+  }
+}
+.asset {
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  background:rgba(244,239,252,0.93);
+  box-shadow:0 10px 24px rgba(61,47,93,0.07);
+}
+.asset .thumb {
+  aspect-ratio:1 / 1;
+  display:block;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+  background:rgba(246,242,252,0.95);
+}
+.asset--home .thumb {
+  aspect-ratio:2 / 1;
+}
+.asset .thumb img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  display:block;
+}
+.asset .meta {
+  padding:14px;
+}
+.asset .meta h4 { font-size:16px; margin-bottom:6px; }
+.asset .meta p { font-size:13px; color:var(--text-dim); }
+
+.about-head {
+  text-align:center;
+  margin-bottom:24px;
+}
+.about-head .mark {
+  font-family:var(--sans);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:rgba(230,220,249,0.86);
+  margin-bottom:10px;
+}
+.about-head h2 {
+  font-size:clamp(36px, 5vw, 66px);
+  line-height:1.1;
+  color:#f4eefc;
+  letter-spacing:.02em;
+}
+.about-card {
+  width:min(860px, 100%);
+  margin:0 auto;
+  border:1px solid rgba(181,164,218,0.38);
+  border-radius:22px;
+  padding:40px 44px;
+  background:linear-gradient(145deg, rgba(52,43,74,0.94), rgba(40,33,58,0.9));
+  box-shadow:0 28px 50px rgba(29,21,44,0.38);
+  position:relative;
+  overflow:hidden;
+}
+.about-card::before {
+  content:"";
+  position:absolute;
+  inset:-50% -25% auto auto;
+  width:380px;
+  height:380px;
+  background:radial-gradient(circle, rgba(205,188,238,0.22), transparent 70%);
+  pointer-events:none;
+}
+.about-name {
+  font-size:44px;
+  line-height:1;
+  color:#f8f4ff;
+  margin-bottom:22px;
+  letter-spacing:.01em;
+}
+.about-copy {
+  display:grid;
+  gap:16px;
+}
+.about-copy p {
+  font-size:17px;
+  line-height:1.95;
+  color:rgba(236,228,250,0.9);
+}
+.about-meta {
+  margin-top:26px;
+  display:grid;
+  gap:10px;
+}
+.about-meta div {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:var(--sans);
+  color:rgba(206,193,233,0.92);
+  font-size:14px;
+}
+.about-meta span {
+  color:rgba(183,166,218,0.98);
+}
+.about-meta a {
+  color:#ddd0f4;
+  text-decoration:none;
+  border-bottom:1px dashed rgba(221,208,244,0.62);
+}
+.about-meta a:hover {
+  color:#f5edff;
+  border-bottom-color:#f5edff;
+}
+.about-cta {
+  margin-top:26px;
+  display:block;
+  width:100%;
+  border:1px solid rgba(231,217,255,0.44);
+  border-radius:12px;
+  text-align:center;
+  text-decoration:none;
+  background:linear-gradient(135deg, #cdb8ef, #bba4df);
+  color:#2f2346;
+  font-family:var(--sans);
+  font-size:14px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:700;
+  padding:14px 18px;
+  transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+.about-cta:hover {
+  transform:translateY(-1px);
+  filter:brightness(1.05);
+  box-shadow:0 10px 24px rgba(31,24,48,0.36);
+}
+@media (max-width:760px) {
+  .about-card {
+    padding:28px 20px;
+    border-radius:16px;
+  }
+  .about-name {
+    font-size:34px;
+    margin-bottom:16px;
+  }
+  .about-copy p {
+    font-size:15px;
+    line-height:1.8;
+  }
+}
+
+.note {
+  margin-top:16px;
+  border:1px solid rgba(105,87,146,0.28);
+  background:rgba(145,124,190,0.12);
+  border-radius:14px;
+  padding:14px 16px;
+  color:#3f3655;
+  font-size:14px;
+}
+
+.footer {
+  padding:42px 0 56px;
+  text-align:center;
+  border-top:1px solid var(--line);
+}
+.footer .s1 {
+  font-family:var(--display);
+  font-size:24px;
+  color:var(--gold-2);
+  font-style:italic;
+}
+.footer .s2 {
+  margin-top:8px;
+  font-family:var(--sans);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-size:11px;
+  color:var(--text-mute);
+}
+
+.reveal {
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity .8s ease, transform .8s ease;
+}
+.reveal.in {
+  opacity:1;
+  transform:none;
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="brand">本命手串</div>
+  <div class="top-meta">
+    <span>个人兴趣项目</span>
+    <span>2026.02—2026.04</span>
+    <span>React + Vite + H5</span>
+  </div>
+</nav>
+
+<aside class="toc" aria-label="页面目录">
+  <h4>目录</h4>
+  <a href="#snapshot">项目简介</a>
+  <a href="#problem">首版问题</a>
+  <a href="#feedback">内测反馈</a>
+  <a href="#goal">方向调整</a>
+  <a href="#execution">主要改动</a>
+  <a href="#result">迭代记录</a>
+  <a href="#assets">页面展示</a>
+  <a href="#about">个人简历</a>
+</aside>
+
+<header class="hero" id="top">
+  <div class="hero-orbit" aria-hidden="true">
+    <svg viewBox="0 0 680 680">
+      <defs>
+        <radialGradient id="bead" cx=".35" cy=".35">
+          <stop offset="0" stop-color="#e8e1f5" stop-opacity=".9"/>
+          <stop offset=".5" stop-color="#8d7cb4" stop-opacity=".52"/>
+          <stop offset="1" stop-color="#645a7f" stop-opacity=".22"/>
+        </radialGradient>
+      </defs>
+      <circle cx="340" cy="340" r="260" fill="none" stroke="#8f7ab8" stroke-opacity=".28" stroke-dasharray="1 5"/>
+      <circle cx="340" cy="340" r="300" fill="none" stroke="#8f7ab8" stroke-opacity=".16"/>
+      <g transform="translate(340 340)">
+        <circle cx="260" cy="0" r="22" fill="url(#bead)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(18)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(36)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(54)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(72)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(90)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(108)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(126)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(144)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(162)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(180)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(198)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(216)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(234)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(252)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(270)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(288)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(306)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(324)"/>
+        <circle cx="260" cy="0" r="22" fill="url(#bead)" transform="rotate(342)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="container reveal">
+    <div class="eyebrow">个人项目复盘</div>
+    <h1 class="h1">
+      本命手串
+      <span class="en">兴趣项目从首版到上线的迭代记录</span>
+    </h1>
+    <p class="hero-lead">
+      项目类型为五行命理✖️手串推荐 H5。<br>
+      记录范围包括：首版问题、内测反馈、调整方向、主要改动、版本迭代与最终上线状态。
+    </p>
+    <div class="hero-site">
+      <span class="hero-site-label">正式网址</span>
+      <a class="hero-site-link" href="https://benmingshouchuan.fun" target="_blank" rel="noreferrer">benmingshouchuan.fun</a>
+      <span class="hero-site-note">已备案，可直接访问</span>
+    </div>
+    <div class="hero-focus">
+      <div class="hero-focus-title">项目摘要</div>
+      <div class="hero-focus-grid">
+        <div class="hero-focus-item">
+          <div class="k">首版状态</div>
+          <p>v1.0 已可运行，但存在可用性、承接路径和表达风险问题。</p>
+        </div>
+        <div class="hero-focus-item">
+          <div class="k">处理重点</div>
+          <p>问卷结构、结果页表达、推荐规则、图鉴入口与上线前检查。</p>
+        </div>
+        <div class="hero-focus-item">
+          <div class="k">版本结果</div>
+          <p>完成 6 项主要改动，形成 v4.0 上线版本。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="snapshot">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">项目简介</div>
+      <h2>本命手串推荐：<br>
+        一款结合五行命理与好运祝福的趣味测试</h2>
+      <p>起点是个人兴趣爱好，项目过程覆盖从首版到网页上线的完整迭代记录。</p>
+    </div>
+
+    <div class="snapshot reveal">
+      <div class="snapshot-grid">
+        <div class="snapshot-item">
+          <div class="k">项目类型</div>
+          <div class="v">个人兴趣类 H5 测算</div>
+          <div class="sub">五行命理✖️手串推荐</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="k">项目角色</div>
+          <div class="v">个人项目发起与执行</div>
+          <div class="sub">产品定位、内容风格、算法机制、用户体验、UI设计</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="k">核心难点</div>
+          <div class="v">领域小众但需要降低门槛吸引大众，推荐结果和内容生成需去模板化</div>
+          <div class="sub">同时需控制表达风险与上线稳定性</div>
+        </div>
+        <div class="snapshot-item">
+          <div class="k">最终产出</div>
+          <div class="v">v4.0 上线版</div>
+          <div class="sub">形成一款包括趣味测评、个人喜好的严格匹配同时兼容灵活选择的手串推荐测试</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="problem" style="background:linear-gradient(180deg, transparent, rgba(145,124,190,0.16));">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">首版问题</div>
+      <h2>v1.0 主要问题</h2>
+      <p>问题集中在流程有效性、结果页承接路径和内容可信度。</p>
+    </div>
+
+    <div class="table reveal">
+      <div class="row">
+        <div class="level p0">严重</div>
+        <div class="title">结果页没有承接动作（分享/重测/推荐）</div>
+        <div class="impact">测试结束后缺少后续操作路径，影响传播和后续转化可能。</div>
+      </div>
+      <div class="row">
+        <div class="level p1">重要</div>
+        <div class="title">问卷路径长且专业门槛高</div>
+        <div class="impact">用户未完成即流失，大众用户无法代入。</div>
+      </div>
+      <div class="row">
+        <div class="level p1">重要</div>
+        <div class="title">推荐结果缺少解释，可信度偏低</div>
+        <div class="impact">“为什么是这串”无法自证，用户分享意愿下降。</div>
+      </div>
+      <div class="row">
+        <div class="level p1">重要</div>
+        <div class="title">命名和话术有潜在合规风险</div>
+        <div class="impact">存在审核不通过风险，影响上线窗口。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="feedback" style="background:linear-gradient(180deg, rgba(145,124,190,0.1), transparent);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">内测反馈</div>
+      <h2>内测反馈收集与汇总表</h2>
+      <p>首轮内测样本为 80 位测试者。为不限制内测者思路，反馈先记录反馈原对话，再按问题类型拉表归类，用于后续改动排序。</p>
+    </div>
+
+    <div class="research-wrap reveal">
+      <div class="panel">
+        <h3>收集方式</h3>
+        <ul>
+          <li>收集对象：80 位测试者（20-45 岁，不同职业背景）。</li>
+          <li>收集内容：使用流畅度、做题体验、结果页命中率、分享意愿、整体感受。</li>
+          <li>输出形式：反馈汇总表（用户基本信息 / 产品定位感知 / 核心诉求 / 体验感知）。</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>原始反馈示例</h3>
+        <div class="quote-list">
+          <div class="quote"><div class="who">测试者 A</div><div class="say">“我觉得我全程都是懵懵的就做完了，一开始前面做这个题的时候。我觉得有一点难选。”</div></div>
+          <div class="quote"><div class="who">测试者 B</div><div class="say">“我觉得问题可以再多设置几个，非常快速就结束出结果了！”</div></div>
+          <div class="quote"><div class="who">测试者 C</div><div class="say">“分享的方式，可以一键生成本命文玩资料卡（图片）下方附带二维码的方式，这样可视性是不是比较强点。”</div></div>
+          <div class="quote"><div class="who">测试者 D</div><div class="say">“派系名称缺少代入感，整体排版看起来有些累。”</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="matrix reveal" style="margin-top:12px;">
+      <div class="matrix-row head">
+        <div>问题类型</div><div>反馈比例</div><div>典型描述</div><div>改进方向</div>
+      </div>
+      <div class="matrix-row">
+        <div class="strong">题量与信息量</div>
+        <div>70%</div>
+        <div>题目过少，结果依据感不足</div>
+        <div class="strong">问卷从 3 题调整为 7 题，题目类型偏向生活化场景</div>
+      </div>
+      <div class="matrix-row">
+        <div class="strong">结果区分度</div>
+        <div>65%</div>
+        <div>不同测试者结果接近</div>
+        <div class="strong">重做推荐步骤并重写数据字段</div>
+      </div>
+      <div class="matrix-row">
+        <div class="strong">结果页承接</div>
+        <div>45%</div>
+        <div>测试完成后缺少后续路径</div>
+        <div class="strong">补齐分享与重测入口</div>
+      </div>
+      <div class="matrix-row">
+        <div class="strong">文案表达风险</div>
+        <div>20%</div>
+        <div>“命定”类表述存在风险</div>
+        <div class="strong">统一替换敏感词并复核</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goal">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">方向调整</div>
+      <h2>调整方向</h2>
+      <p>先修复主流程与结果表达，再处理展示层优化，聚焦于内容细节与UI设计。</p>
+    </div>
+
+    <div class="goal-grid reveal">
+      <div class="goal-card">
+        <div class="tag">项目定位</div>
+        <ul>
+          <li>不做大而全，不加无关功能。</li>
+          <li>不把它做成复杂的“专业测算系统”。</li>
+        </ul>
+      </div>
+      <div class="goal-card">
+        <div class="tag">优先改动</div>
+        <ul>
+          <li>把问卷路径做短，但保持信息丰富度。</li>
+          <li>调整结果页文案结构，减少模板化表达。</li>
+          <li>补齐分享和重测入口，完善传播路径。</li>
+        </ul>
+      </div>
+      <div class="goal-card">
+        <div class="tag">校验标准</div>
+        <ul>
+          <li>保持推荐结果差异化、个性化。</li>
+          <li>用户要看得懂“为什么推荐这个”。</li>
+          <li>内容表达避免触发敏感风险。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="execution" style="background:linear-gradient(180deg, transparent, rgba(145,124,190,0.16));">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">迭代总结</div>
+      <h2>主要改动</h2>
+      <p>每次改动均对应明确问题，并在下一轮继续验证。</p>
+    </div>
+
+
+    <div class="workstreams reveal">
+      <article class="stream">
+        <div class="badge">01</div>
+        <h3>问卷改版：从 10 题到 7 题</h3>
+        <p class="line"><strong>为什么改：</strong>原版题目理解成本高，很多人做不到最后。</p>
+        <p class="line"><strong>怎么改：</strong>删掉门槛题，改成更生活化的问题，并保留“不了解也能选”的选项。</p>
+        <p class="line"><strong>改完后：</strong>完成流程更顺，信息也比 3 题版更完整。</p>
+      </article>
+
+      <article class="stream">
+        <div class="badge">02</div>
+        <h3>结果页改版：从术语到“能代入的标签”</h3>
+        <p class="line"><strong>为什么改：</strong>“五行术语”门槛高，对普通用户不够友好。</p>
+        <p class="line"><strong>怎么改：</strong>调整命名和解释文案，补充“推荐依据”说明。</p>
+        <p class="line"><strong>改完后：</strong>降低结果页阅读和理解成本。</p>
+      </article>
+
+      <article class="stream">
+        <div class="badge">03</div>
+        <h3>推荐规则重做：增加个性化推荐指标</h3>
+        <p class="line"><strong>为什么改：</strong>V1版本出现不同人拿到相似结果的问题。</p>
+        <p class="line"><strong>怎么改：</strong>把推荐算法拆成四步，并重写 56 款手串数据字段。</p>
+        <p class="line"><strong>改完后：</strong>不同输入组合的结果区分度提升。</p>
+      </article>
+
+      <article class="stream">
+        <div class="badge">04</div>
+        <h3>上线前收尾：砍功能 + 改词 + 手动验证</h3>
+        <p class="line"><strong>为什么改：</strong>突出产品测评种草定位</p>
+        <p class="line"><strong>怎么改：</strong>聚焦纯手串品类，砍掉其他品类文玩。</p>
+        <p class="line"><strong>改完后：</strong>有效提升用户分享兴趣，精进内容吸引效果</p>
+      </article>
+      
+      <article class="stream">
+        <div class="badge">05</div>
+        <h3>新增图鉴入口：补充结果后的二级路径</h3>
+        <p class="line"><strong>为什么改：</strong>图鉴丰富度未能完全赋能用户体验。</p>
+        <p class="line"><strong>怎么改：</strong>在结果页增加图鉴入口，主流程扩展为“测试结果 -> 图鉴浏览”。</p>
+        <p class="line"><strong>改完后：</strong>结果页后的用户路径从单点结束改为可继续浏览。</p>
+      </article>
+
+      <article class="stream">
+        <div class="badge">06</div>
+        <h3>图鉴解锁机制：可查看指定手串匹配值</h3>
+        <p class="line"><strong>为什么改：</strong>测试结果解释维度不足，缺少可展开的细项信息。</p>
+        <p class="line"><strong>怎么改：</strong>在图鉴中增加解锁逻辑，支持查看指定手串的匹配值明细。</p>
+        <p class="line"><strong>改完后：</strong>丰富用户体验感，支持定制手串并查看“缘分值”。</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="result">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">迭代记录</div>
+      <h2>从 v1.0 到上线版</h2>
+      <p>版本按问题清单推进迭代，最终形成 v4.0 上线版本。</p>
+    </div>
+
+    <div class="panel reveal" style="margin-top:12px;">
+      <h3>版本迭代记录</h3>
+      <div class="timeline">
+        <div class="t-item"><strong>v1.0 · 第一个可运行版本</strong><p>先跑通整体流程，但问题还比较多。</p></div>
+        <div class="t-item"><strong>v2.0 · 传播向改版（10 题 → 3 题）</strong><p>从“商品变现”转为“社媒传播”，以截图传播意愿为改动方向。</p></div>
+        <div class="t-item"><strong>v3.0 · 阶段一收尾</strong><p>透明材质 Canvas 修复、新增 drawCrystalBead 函数(15 款水晶类材质)。</p></div>
+        <div class="t-item"><strong>v3.2 · 80 位内测反馈回收</strong><p>汇总四类核心问题：算法同质化、缺个人标签、诉求需细分、合规风险。</p></div>
+        <div class="t-item"><strong>v4.0 · PRD 重构落地</strong><p>题目 3 题 → 7 题字段化，并完成四层算法与数据分级重写。</p></div>
+        <div class="t-item"><strong>v4.2 · 图鉴扩展</strong><p>新增图鉴入口与手串匹配值解锁能力。</p></div>
+        <div class="t-item"><strong>v4.3 · 分享机制重做</strong><p>阶段一取消了分享卡片；重做“本命手串资料卡”并调整内容版式上线。</p></div>
+        <div class="t-item"><strong>Launch · 正式上线</strong><p>上线前完成合规替换与对照验证，版本稳定发布。</p></div>
+      </div>
+    </div>
+
+   
+  </div>
+</section>
+
+<section id="assets" style="background:linear-gradient(180deg, rgba(145,124,190,0.12), transparent);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="mark">页面展示</div>
+      <h2>上线版本关键页面</h2>
+      <p>展示上线版本的关键页面和对应材料。</p>
+    </div>
+
+    <div class="asset-grid reveal">
+      <article class="asset asset--home">
+        <div class="thumb"><img src="./assets/pages/page-01-home.webp" alt="上线首页" loading="lazy"></div>
+        <div class="meta">
+          <h4>产品封面与首屏引导</h4>
+          <p>展示最终上线版本的视觉和定位表达。</p>
+        </div>
+      </article>
+      <article class="asset">
+        <div class="thumb"><img src="./assets/pages/page-02-quiz.webp" alt="问卷主流程" loading="lazy"></div>
+        <div class="meta">
+          <h4>问卷结构改版前后</h4>
+          <p>体现从专业门槛题到用户语言题的结构演进。</p>
+        </div>
+      </article>
+      <article class="asset">
+        <div class="thumb"><img src="./assets/pages/page-03-result.webp" alt="结果页" loading="lazy"></div>
+        <div class="meta">
+          <h4>身份标签 + 推荐解释</h4>
+          <p>突出“可认同 + 可分享”的产品目标。</p>
+        </div>
+      </article>
+      <article class="asset">
+        <div class="thumb"><img src="./assets/pages/page-04-atlas-entry.webp" alt="图鉴入口" loading="lazy"></div>
+        <div class="meta">
+          <h4>结果页到图鉴的路径</h4>
+          <p>展示结果页入口与图鉴承接关系。</p>
+        </div>
+      </article>
+      <article class="asset">
+        <div class="thumb"><img src="./assets/pages/page-05-match-unlock.webp" alt="匹配值解锁页" loading="lazy"></div>
+        <div class="meta">
+          <h4>指定手串匹配值</h4>
+          <p>展示图鉴中解锁后的匹配值明细。</p>
+        </div>
+      </article>
+      <article class="asset">
+        <div class="thumb"><img src="./assets/pages/page-06-reco-logic.svg" alt="推荐链路图" loading="lazy"></div>
+        <div class="meta">
+          <h4>推荐思路图</h4>
+          <p>展示推荐规则是怎么一步步得出结果的。</p>
+        </div>
+      </article>
+      <article class="asset">
+        <div class="thumb"><img src="./assets/pages/page-07-share-card.webp" alt="分享卡片" loading="lazy"></div>
+        <div class="meta">
+          <h4>分享卡片</h4>
+          <p>展示资料卡的最终内容版式与分享呈现效果。</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="background:linear-gradient(180deg, rgba(125,106,163,0.18), rgba(52,43,73,0.96));">
+  <div class="container">
+    <div class="about-head reveal">
+      <h2>关于开发者</h2>
+    </div>
+
+    <article class="about-card reveal">
+      <h3 class="about-name">邓甯予</h3>
+      <div class="about-copy">
+        <p>南开大学文艺学专业背景，研究方向为大众文艺美学。长期关注内容如何被理解和传播，并将这套分析方法用于产品表达与体验设计。</p>
+        <p>在本命手串这个项目中担任全流程pm，负责从首版到上线的完整迭代：问题梳理、问卷改版、结果页文案、推荐规则重构、图鉴入口与匹配值解锁机制，以及上线前验证。</p>
+        <p>目前持续更新该项目，也在关注内容产品、AI 应用与运营方向的工作机会。</p>
+      </div>
+      <div class="about-meta">
+        <div><span>邮箱</span><a href="mailto:dny2026@126.com">dny2026@126.com</a></div>
+        <div><span>微信</span><b>Anyd_1213</b></div>
+      </div>
+      <a
+        class="about-cta"
+        href="./assets/resume/deng-ningyu-resume.pdf"
+        download="邓甯予-简历.pdf"
+        data-resume-link
+        data-fallback-mailto="mailto:dny2026@126.com?subject=简历获取"
+      >一键下载简历（PDF）</a>
+    </article>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="s1">本命手串 · 个人项目</div>
+    <div class="s2">Updated in April 2026</div>
+  </div>
+</footer>
+
+<script>
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("in");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
+const tocLinks = Array.from(document.querySelectorAll(".toc a"));
+const sections = tocLinks
+  .map((link) => document.querySelector(link.getAttribute("href")))
+  .filter(Boolean);
+
+const tocObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    const id = entry.target.getAttribute("id");
+    const link = tocLinks.find((a) => a.getAttribute("href") === `#${id}`);
+    if (!link) return;
+    if (entry.isIntersecting) {
+      tocLinks.forEach((l) => l.classList.remove("active"));
+      link.classList.add("active");
+    }
+  });
+}, { rootMargin: "-40% 0px -52% 0px", threshold: 0 });
+
+sections.forEach((section) => tocObserver.observe(section));
+
+const resumeLink = document.querySelector("[data-resume-link]");
+
+if (resumeLink && window.location.protocol !== "file:") {
+  resumeLink.addEventListener("click", async (event) => {
+    try {
+      const response = await fetch(resumeLink.href, {
+        method: "HEAD",
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("resume-missing");
+      }
+    } catch (error) {
+      event.preventDefault();
+      window.location.href = resumeLink.dataset.fallbackMailto;
+    }
+  });
+}
+</script>
+</body>
+</html>
