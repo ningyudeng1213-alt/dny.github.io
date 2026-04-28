@@ -246,7 +246,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
         {/* 左侧文字 */}
         <div ref={leftTextRef} style={{
           position: 'absolute',
-          fontSize: 'clamp(36px, 6.5vw, 100px)', lineHeight: 0.85,
+          fontSize: 'clamp(24px, 4vw, 64px)', lineHeight: 0.85,
           fontStyle: 'italic', fontWeight: 700, letterSpacing: '-0.03em',
           color: '#0d0d0d', display: 'flex', flexDirection: 'column',
           fontFamily: "var(--font-oswald), sans-serif",
@@ -409,7 +409,7 @@ export function IntroScreen({ onEnter }: { onEnter: () => void }) {
         {/* 右侧文字 */}
         <div ref={rightTextRef} style={{
           position: 'absolute',
-          fontSize: 'clamp(28px, 4.5vw, 72px)', lineHeight: 0.85,
+          fontSize: 'clamp(24px, 4vw, 64px)', lineHeight: 0.85,
           fontStyle: 'italic', fontWeight: 700, letterSpacing: '-0.03em',
           color: '#0d0d0d', display: 'flex', flexDirection: 'column',
           fontFamily: "var(--font-oswald), sans-serif",
