@@ -1,0 +1,19 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/articles/article-detail-exam/page": "app/articles/article-detail-exam/page.js",
+  "/articles/article-detail-games/page": "app/articles/article-detail-games/page.js",
+  "/articles/article-detail-gaze/page": "app/articles/article-detail-gaze/page.js",
+  "/articles/article-detail-goodstuff/page": "app/articles/article-detail-goodstuff/page.js",
+  "/articles/article-detail-heterotopia/page": "app/articles/article-detail-heterotopia/page.js",
+  "/articles/article-detail-nanhou/page": "app/articles/article-detail-nanhou/page.js",
+  "/articles/article-detail-parrotkill/page": "app/articles/article-detail-parrotkill/page.js",
+  "/articles/article-detail-robotdreams/page": "app/articles/article-detail-robotdreams/page.js",
+  "/articles/article-detail-yolo/page": "app/articles/article-detail-yolo/page.js",
+  "/articles/article-detail/page": "app/articles/article-detail/page.js",
+  "/articles/page": "app/articles/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js",
+  "/projects/page": "app/projects/page.js",
+  "/social/page": "app/social/page.js"
+}

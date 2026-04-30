@@ -34,7 +34,7 @@ function MusicPlayer() {
     }["MusicPlayer.useEffect"], [
         playing
     ]);
-    const basePath = ("TURBOPACK compile-time value", "/dny.github.io") || '';
+    const basePath = ("TURBOPACK compile-time value", "") || '';
     // 唱片阴影：停止 vs 播放
     const discShadow = playing ? '6px 12px 30px rgba(0,0,0,0.5), 3px 6px 12px rgba(0,0,0,0.3)' : '4px 8px 20px rgba(0,0,0,0.35), 2px 4px 8px rgba(0,0,0,0.2)';
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {

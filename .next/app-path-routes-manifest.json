@@ -1,0 +1,19 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/articles/article-detail-exam/page": "/articles/article-detail-exam",
+  "/articles/article-detail-games/page": "/articles/article-detail-games",
+  "/articles/article-detail-gaze/page": "/articles/article-detail-gaze",
+  "/articles/article-detail-goodstuff/page": "/articles/article-detail-goodstuff",
+  "/articles/article-detail-heterotopia/page": "/articles/article-detail-heterotopia",
+  "/articles/article-detail-nanhou/page": "/articles/article-detail-nanhou",
+  "/articles/article-detail-parrotkill/page": "/articles/article-detail-parrotkill",
+  "/articles/article-detail-robotdreams/page": "/articles/article-detail-robotdreams",
+  "/articles/article-detail-yolo/page": "/articles/article-detail-yolo",
+  "/articles/article-detail/page": "/articles/article-detail",
+  "/articles/page": "/articles",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/projects/page": "/projects",
+  "/social/page": "/social"
+}

@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[22016,["/_next/static/chunks/d94f21aeb1447008.js","/_next/static/chunks/8e26859234112358.js"],""]
+3:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/d2be314c3ece3fbe.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"36PhI6b_NzQFNYcLMTaRR","rsc":["$","$1","c",{"children":[["$","div",null,{"className":"min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-center px-6","children":[["$","p",null,{"className":"font-sans text-xs tracking-[0.35em] uppercase text-white/35 mb-5","children":"Social"}],["$","h1",null,{"className":"text-4xl text-white font-light mb-4","style":{"fontFamily":"Georgia, 'Songti SC', STSong, serif"},"children":"自媒体经历"}],["$","p",null,{"className":"text-white/35 text-sm mb-10 font-sans","children":"内容整理中，敬请期待。"}],["$","$L2",null,{"href":"/","className":"font-sans text-white/40 text-xs tracking-widest hover:text-white/70 transition-colors","children":"← 返回首页"}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/8e26859234112358.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+5:null

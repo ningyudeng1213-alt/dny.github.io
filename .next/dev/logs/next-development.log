@@ -1,11 +1,34 @@
-[00:00:00.539] Server  LOG     ✓ Ready in 371ms
-[00:00:01.722] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:03.273] Server  LOG     ✓ Compiled in 14ms
-[00:00:05.724] Server  LOG     ✓ Compiled in 9ms
-[00:00:08.857] Server  LOG     ✓ Compiled in 10ms
-[00:08:35.528] Server  LOG     ✓ Compiled in 25ms
-[00:08:37.931] Server  LOG     ✓ Compiled in 11ms
-[00:08:40.192] Server  LOG     ✓ Compiled in 11ms
-[00:08:42.906] Server  LOG     ✓ Compiled in 11ms
-[00:08:45.866] Server  LOG       Reload env: .env.local
-[00:08:46.035] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:00.762] Server  LOG     ✓ Ready in 576ms
+[00:00:02.025] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:02.035] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:02.049] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:02.063] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:12:52.868] Server  LOG     ✓ Compiled in 55ms
+[06:03:05.999] Server  LOG     ✓ Compiled in 133ms
+[06:06:18.204] Server  LOG     ✓ Compiled in 44ms
+[06:10:01.537] Server  LOG     ✓ Compiled in 36ms
+[06:16:55.473] Server  LOG     ✓ Compiled in 49ms
+[06:27:11.737] Server  LOG     ✓ Compiled in 33ms
+[46:54:33.195] Server  LOG     ✓ Compiled in 90ms
+[46:54:42.878] Server  LOG     ✓ Compiled in 20ms
+[46:55:26.206] Server  LOG     ✓ Compiled in 17ms
+[46:55:44.897] Server  LOG     ✓ Compiled in 21ms
+[47:06:07.222] Server  LOG     ✓ Compiled in 33ms
+[47:06:17.747] Server  LOG     ✓ Compiled in 23ms
+[47:06:18.048] Browser ERROR   uncaughtError: ReferenceError: ResumeDownloadButton is not defined
+[47:06:18.048] Browser ERROR   uncaughtError: ReferenceError: ResumeDownloadButton is not defined
+[47:06:18.048] Browser ERROR   uncaughtError: ReferenceError: ResumeDownloadButton is not defined
+[47:06:18.048] Browser ERROR   uncaughtError: ReferenceError: ResumeDownloadButton is not defined
+[47:06:23.635] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[47:06:23.635] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[47:06:23.648] Server  LOG     ✓ Compiled in 19ms
+[47:06:23.649] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[47:06:23.750] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[47:06:24.098] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[47:06:24.111] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[47:06:24.128] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[47:06:24.143] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[52:46:33.510] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[52:46:34.160] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[52:46:34.684] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.
+[52:46:35.111] Browser WARN    Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.

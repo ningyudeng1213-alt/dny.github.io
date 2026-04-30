@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/articles/layout,_N_T_/articles/article-detail-parrotkill/layout,_N_T_/articles/article-detail-parrotkill/page,_N_T_/articles/article-detail-parrotkill/"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/articles/article-detail-parrotkill/__PAGE__",
+    "/articles/article-detail-parrotkill",
+    "/articles",
+    "/_index",
+    "/_head"
+  ]
+}

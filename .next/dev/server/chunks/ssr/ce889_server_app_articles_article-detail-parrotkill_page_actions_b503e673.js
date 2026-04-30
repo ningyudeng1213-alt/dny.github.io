@@ -1,0 +1,7 @@
+module.exports = [
+"[project]/.next-internal/server/app/articles/article-detail-parrotkill/page/actions.js [app-rsc] (server actions loader, ecmascript)", ((__turbopack_context__, module, exports) => {
+
+}),
+];
+
+//# sourceMappingURL=ce889_server_app_articles_article-detail-parrotkill_page_actions_b503e673.js.map
